@@ -1,0 +1,74 @@
+# Deploy static site to Cloudflare Pages (direct upload via GitHub Actions).
+#
+# Required GitHub repository secrets (Settings → Secrets and variables → Actions):
+#   CLOUDFLARE_API_TOKEN   — Create at Cloudflare Dashboard → My Profile → API Tokens
+#                            Template: "Edit Cloudflare Workers" OR custom with:
+#                            Account → Cloudflare Pages → Edit
+#   CLOUDFLARE_ACCOUNT_ID  — Dashboard → Workers & Pages → Account ID (right column)
+#
+# Optional repository variable (Settings → Secrets and variables → Actions → Variables):
+#   CLOUDFLARE_PAGES_PROJECT_NAME — defaults to "arovia" if unset
+#
+# In Cloudflare: create a Pages project (Direct Upload) with the same name, or allow
+# the first deploy to create it. Turn OFF Pages "Connect to Git" build if you only
+# want deployments from this workflow (avoids duplicate builds).
+
+name: Cloudflare Pages
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: cloudflare-pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+      pull-requests: write
+
+    env:
+      PAGES_PROJECT: ${{ vars.CLOUDFLARE_PAGES_PROJECT_NAME || 'arovia' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Verify dist output
+        run: |
+          test -f dist/index.html
+          test -f dist/_redirects
+          test -d dist/css
+          test -d dist/js
+
+      - name: Deploy to Cloudflare Pages
+        id: pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: ${{ env.PAGES_PROJECT }}
+          directory: dist
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.head_ref || github.ref_name }}
