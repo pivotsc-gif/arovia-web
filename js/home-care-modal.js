@@ -10,77 +10,15 @@
 
   function initHomeCareServicesHub() {
     // -------------------------------------------------------------
-    // 1. Category Filter & Interactive Horizontal Service Navigation (Pivot Pattern)
+    // 1. Category Filter Switching Logic
     // -------------------------------------------------------------
     const btnClinical = document.getElementById('btnClinicalCare');
     const btnNonClinical = document.getElementById('btnNonClinicalCare');
     const introClinical = document.getElementById('introClinical');
     const introNonClinical = document.getElementById('introNonClinical');
     const serviceItems = document.querySelectorAll('.hc-service-item');
-    const stickyNavEl = document.getElementById('hcServiceNavSticky');
-    const navGroupClinical = document.getElementById('navGroupClinical');
-    const navGroupNonClinical = document.getElementById('navGroupNonClinical');
 
     let currentCategory = 'clinical';
-    let isProgrammaticScroll = false;
-    let scrollLockTimer = null;
-
-    function getStickyOffsets() {
-      const headerEl = document.querySelector('.site-header');
-      const headerH = headerEl ? headerEl.offsetHeight : (window.innerWidth <= 768 ? 64 : 80);
-      const navH = stickyNavEl ? stickyNavEl.offsetHeight : 48;
-      return { headerH, navH, total: headerH + navH + 16 };
-    }
-
-    function setActiveServiceNav(targetId, shouldScrollNav = false) {
-      const activeGroup = currentCategory === 'clinical' ? navGroupClinical : navGroupNonClinical;
-      if (!activeGroup) return;
-
-      const items = activeGroup.querySelectorAll('.hc-service-nav__item');
-      items.forEach(item => {
-        const itemId = item.getAttribute('data-service-id') || item.getAttribute('href').replace('#', '');
-        const isActive = itemId === targetId;
-        item.classList.toggle('hc-service-nav__item--active', isActive);
-        item.setAttribute('aria-selected', isActive ? 'true' : 'false');
-        if (isActive) {
-          item.setAttribute('aria-current', 'location');
-          if (shouldScrollNav) {
-            item.scrollIntoView({ inline: 'center', behavior: 'smooth', block: 'nearest' });
-          }
-        } else {
-          item.removeAttribute('aria-current');
-        }
-      });
-    }
-
-    function scrollToService(serviceId) {
-      const targetEl = document.getElementById(serviceId);
-      if (!targetEl) return;
-
-      isProgrammaticScroll = true;
-      if (scrollLockTimer) clearTimeout(scrollLockTimer);
-
-      setActiveServiceNav(serviceId, true);
-
-      const offsets = getStickyOffsets();
-      const rect = targetEl.getBoundingClientRect();
-      const targetY = Math.max(0, window.pageYOffset + rect.top - offsets.total);
-
-      window.scrollTo({
-        top: targetY,
-        behavior: 'smooth'
-      });
-
-      // Subtle target card highlight feedback
-      targetEl.classList.add('hc-service-item--targeted');
-      setTimeout(() => {
-        targetEl.classList.remove('hc-service-item--targeted');
-      }, 1200);
-
-      scrollLockTimer = setTimeout(() => {
-        isProgrammaticScroll = false;
-      }, 800);
-    }
 
     function setCategory(category) {
       currentCategory = category;
@@ -99,18 +37,6 @@
       // Update Subtext Intros
       if (introClinical) introClinical.style.display = isClinical ? 'block' : 'none';
       if (introNonClinical) introNonClinical.style.display = !isClinical ? 'block' : 'none';
-
-      // Toggle Horizontal Service Nav Groups
-      if (navGroupClinical) {
-        navGroupClinical.style.display = isClinical ? 'flex' : 'none';
-      }
-      if (navGroupNonClinical) {
-        navGroupNonClinical.style.display = !isClinical ? 'flex' : 'none';
-      }
-
-      // Reset Active Nav Item to the first service of the active category
-      const firstId = isClinical ? 'service-home-based-nursing-care' : 'service-elderly-care-services';
-      setActiveServiceNav(firstId, false);
 
       // Toggle Service Cards
       serviceItems.forEach(item => {
@@ -140,76 +66,6 @@
           setCategory('non-clinical');
         }
       });
-    }
-
-    // Attach click listeners to all horizontal service navigation items
-    const allNavLinks = document.querySelectorAll('.hc-service-nav__item');
-    allNavLinks.forEach(link => {
-      link.addEventListener('click', function(e) {
-        e.preventDefault();
-        const targetId = this.getAttribute('data-service-id') || this.getAttribute('href').replace('#', '');
-        if (targetId) {
-          scrollToService(targetId);
-        }
-      });
-    });
-
-    // Scroll-Spy: Track visible service section and update active underline & sticky shadow
-    function updateScrollSpy() {
-      // Manage sticky bar stuck shadow
-      if (stickyNavEl) {
-        const headerEl = document.querySelector('.site-header');
-        const headerH = headerEl ? headerEl.offsetHeight : (window.innerWidth <= 768 ? 64 : 80);
-        const navRect = stickyNavEl.getBoundingClientRect();
-        stickyNavEl.classList.toggle('is-stuck', navRect.top <= headerH + 2);
-      }
-
-      if (isProgrammaticScroll) return;
-
-      const activeServices = Array.from(
-        document.querySelectorAll(`.hc-service-item[data-category="${currentCategory}"]`)
-      );
-      if (!activeServices.length) return;
-
-      const offsets = getStickyOffsets();
-      const triggerY = offsets.total + 30;
-
-      let currentActiveId = activeServices[0].id;
-
-      for (let i = 0; i < activeServices.length; i++) {
-        const rect = activeServices[i].getBoundingClientRect();
-        if (rect.top <= triggerY) {
-          currentActiveId = activeServices[i].id;
-        }
-      }
-
-      setActiveServiceNav(currentActiveId, false);
-    }
-
-    let isScrollTicking = false;
-    window.addEventListener('scroll', function() {
-      if (!isScrollTicking) {
-        window.requestAnimationFrame(function() {
-          updateScrollSpy();
-          isScrollTicking = false;
-        });
-        isScrollTicking = true;
-      }
-    }, { passive: true });
-
-    // Handle deep linking via hash
-    if (window.location.hash) {
-      const hashId = window.location.hash.substring(1);
-      const targetEl = document.getElementById(hashId);
-      if (targetEl && targetEl.classList.contains('hc-service-item')) {
-        const cat = targetEl.getAttribute('data-category');
-        if (cat && cat !== currentCategory) {
-          setCategory(cat);
-        }
-        setTimeout(() => {
-          scrollToService(hashId);
-        }, 350);
-      }
     }
 
     // Default to Clinical Care on page load

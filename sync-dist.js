@@ -16,7 +16,21 @@ fs.readdirSync(rootDir).forEach(file => {
 });
 
 // Copy root asset and config files
-const files = ['Arovia_Logo.png', 'arovia equipment.pdf', 'robots.txt', 'sitemap.xml', '_headers', '_redirects'];
+const files = [
+  'Arovia_Logo.png',
+  'Arovia_Logo.jpg',
+  'apple-touch-icon.png',
+  'favicon.ico',
+  'favicon-16x16.png',
+  'favicon-32x32.png',
+  'favicon-48x48.png',
+  'favicon-512x512.png',
+  'arovia equipment.pdf',
+  'robots.txt',
+  'sitemap.xml',
+  '_headers',
+  '_redirects'
+];
 files.forEach(file => {
   const src = path.join(rootDir, file);
   if (fs.existsSync(src)) {
@@ -41,5 +55,8 @@ function copyDir(src, dest) {
 copyDir(path.join(rootDir, 'css'), path.join(distDir, 'css'));
 copyDir(path.join(rootDir, 'js'), path.join(distDir, 'js'));
 copyDir(path.join(rootDir, 'assets'), path.join(distDir, 'assets'));
+if (fs.existsSync(path.join(rootDir, 'home-care'))) {
+  copyDir(path.join(rootDir, 'home-care'), path.join(distDir, 'home-care'));
+}
 
 console.log('✅ Synchronized all production files into dist/ successfully.');

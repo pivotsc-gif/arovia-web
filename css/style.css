@@ -121,7 +121,7 @@ html {
   scroll-behavior: smooth;
   scroll-padding-top: calc(var(--header-height) + 16px);
   -webkit-text-size-adjust: 100%;
-  overflow-x: clip;
+  overflow-x: hidden;
   max-width: 100%;
 }
 
@@ -134,7 +134,7 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow-x: clip;
+  overflow-x: hidden;
   max-width: 100%;
 }
 
@@ -4697,136 +4697,19 @@ ul, ol {
 }
 
 .modal-footer {
-  padding: 16px var(--spacing-8);
+  padding: var(--spacing-4) var(--spacing-8);
   border-top: 1px solid var(--color-border);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #fafbfc;
+  background-color: var(--color-bg);
   flex-wrap: wrap;
   gap: var(--spacing-4);
 }
 
-.modal-footer__coordinator {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  flex: 1;
-  min-width: 260px;
-}
-
-.modal-coordinator-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: #e6f4f5;
-  color: var(--color-primary, #005662);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  border: 1px solid rgba(0, 86, 98, 0.12);
-}
-
 .modal-footer__note {
-  font-size: 0.86rem;
-  color: var(--color-text);
-  line-height: 1.45;
-}
-
-.modal-footer__actions {
-  display: inline-flex;
-  align-items: center;
-  gap: 14px;
-  flex-shrink: 0;
-}
-
-/* Equipment Modal Action Buttons (Design 1 — Minimal Circular Icon Buttons) */
-.modal-action-btn {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  color: #ffffff !important;
-  text-decoration: none;
-  cursor: pointer;
-  border: none;
-  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-  flex-shrink: 0;
-}
-
-/* Phone: Dark Teal Circle with soft teal glow matching reference */
-.modal-action-btn--phone {
-  background: linear-gradient(135deg, #005662 0%, #003e47 100%);
-  box-shadow: 0 4px 14px rgba(0, 86, 98, 0.38);
-}
-
-.modal-action-btn--phone:hover {
-  transform: scale(1.08);
-  box-shadow: 0 6px 20px rgba(0, 86, 98, 0.55);
-}
-
-.modal-action-btn--phone:active {
-  transform: scale(0.96);
-}
-
-/* WhatsApp: Official Green Circle with soft green glow matching reference */
-.modal-action-btn--whatsapp {
-  background: linear-gradient(135deg, #25D366 0%, #1ea952 100%);
-  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.42);
-}
-
-.modal-action-btn--whatsapp:hover {
-  transform: scale(1.08);
-  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.65);
-}
-
-.modal-action-btn--whatsapp:active {
-  transform: scale(0.96);
-}
-
-.modal-action-btn svg {
-  display: block;
-  fill: currentColor;
-  transition: transform 0.2s ease;
-}
-
-.modal-action-btn:hover svg {
-  transform: scale(1.06);
-}
-
-/* Accessible Keyboard Focus */
-.modal-action-btn:focus-visible {
-  outline: 2px solid #008794;
-  outline-offset: 3px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .modal-action-btn,
-  .modal-action-btn svg {
-    transition: none !important;
-    transform: none !important;
-  }
-}
-
-@media (max-width: 640px) {
-  .modal-footer {
-    padding: 14px 18px;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 14px;
-  }
-
-  .modal-footer__coordinator {
-    width: 100%;
-  }
-
-  .modal-footer__actions {
-    justify-content: flex-end;
-  }
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
 }
 
 /* Catalog Terms / Policies Card */
@@ -8300,172 +8183,7 @@ html:not(.js-loaded) .hero__image-anim {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  margin-bottom: var(--spacing-6, 24px);
-}
-
-/* ==========================================================================
-   2. Interactive Horizontal Service Navigation (Pivot Industries Pattern)
-   ========================================================================== */
-.hc-service-nav-sticky {
-  position: -webkit-sticky;
-  position: sticky;
-  top: var(--header-height, 80px);
-  z-index: 850;
-  background: rgba(255, 255, 255, 0.96);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-top: 1px solid rgba(0, 86, 98, 0.08);
-  border-bottom: 1px solid rgba(0, 86, 98, 0.12);
-  margin-bottom: var(--spacing-8, 32px);
-  transition: box-shadow 0.25s ease, background-color 0.25s ease;
-  width: 100%;
-}
-
-.hc-service-nav-sticky.is-stuck {
-  box-shadow: 0 4px 20px rgba(0, 50, 60, 0.08);
-  background: rgba(255, 255, 255, 0.98);
-}
-
-.hc-service-nav-container {
-  padding-top: 0;
-  padding-bottom: 0;
-}
-
-.hc-service-nav-index {
-  display: flex;
-  align-items: center;
-  width: 100%;
-}
-
-.hc-service-nav-group {
-  display: flex;
-  align-items: center;
-  justify-content: safe center;
-  width: 100%;
-  gap: 0 6px;
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-  -webkit-overflow-scrolling: touch;
-  flex-wrap: nowrap;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.hc-service-nav-group::-webkit-scrollbar {
-  display: none;
-}
-
-.hc-service-nav__item {
-  display: inline-flex;
-  align-items: center;
-  height: 48px;
-  padding: 0 16px;
-  color: var(--color-text-muted, #5d727a);
-  font-family: var(--font-family-sans, 'DM Sans', sans-serif);
-  font-size: 0.92rem;
-  font-weight: 500;
-  line-height: 1;
-  text-decoration: none;
-  white-space: nowrap;
-  flex-shrink: 0;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -1px;
-  transition: color 0.18s ease, border-color 0.18s ease, background-color 0.18s ease;
-  cursor: pointer;
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
-}
-
-.hc-service-nav__item:hover {
-  color: var(--color-primary, #005662);
-  border-bottom-color: rgba(0, 135, 148, 0.4);
-  background-color: rgba(0, 86, 98, 0.025);
-}
-
-.hc-service-nav__num {
-  font-family: 'DM Sans', -apple-system, monospace;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  margin-right: 8px;
-  color: var(--color-text-light, #82959d);
-  transition: color 0.18s ease;
-  flex-shrink: 0;
-}
-
-.hc-service-nav__text {
-  font-size: inherit;
-  font-weight: inherit;
-  color: inherit;
-}
-
-.hc-service-nav__item:hover .hc-service-nav__num {
-  color: var(--color-accent, #008794);
-}
-
-/* Active State with Thin Mint/Teal Underline (Pivot Industries Pattern) */
-.hc-service-nav__item--active,
-.hc-service-nav__item[aria-selected="true"] {
-  color: var(--color-primary-dark, #0a2d33);
-  font-weight: 700;
-  border-bottom-color: #008794;
-  background-color: transparent;
-}
-
-.hc-service-nav__item--active .hc-service-nav__num,
-.hc-service-nav__item[aria-selected="true"] .hc-service-nav__num {
-  color: #008794;
-  font-weight: 800;
-}
-
-/* Keyboard accessibility outline */
-.hc-service-nav__item:focus-visible {
-  outline: 2px solid #008794;
-  outline-offset: -2px;
-}
-
-/* Scroll margin offset for service sections */
-.hc-service-item {
-  scroll-margin-top: 148px;
-}
-
-/* Responsive Navigation Adjustments */
-@media (max-width: 991px) {
-  .hc-service-nav-group {
-    justify-content: flex-start;
-    padding-left: 8px;
-    padding-right: 8px;
-  }
-
-  .hc-service-nav__item {
-    height: 46px;
-    padding: 0 13px;
-    font-size: 0.88rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .hc-service-nav-sticky {
-    top: var(--header-height, 64px);
-    margin-bottom: var(--spacing-6, 24px);
-  }
-
-  .hc-service-nav__item {
-    height: 44px;
-    padding: 0 12px;
-    font-size: 0.84rem;
-  }
-
-  .hc-service-nav__num {
-    font-size: 0.7rem;
-    margin-right: 6px;
-  }
-
-  .hc-service-item {
-    scroll-margin-top: 124px;
-  }
+  margin-bottom: var(--spacing-10, 40px);
 }
 
 .hc-category-switcher {
