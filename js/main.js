@@ -448,10 +448,6 @@
       }
     });
 
-    // Per requirement: The social icons stay visible at all times unless
-    // the user explicitly clicks the Connect button to vanish / reveal them.
-    // Outside clicks and key events do NOT dismiss the icons.
-
     // Mobile drawer connect button listener
     var drawerConnectBtn = document.querySelector('.btn--connect-mobile');
     if (drawerConnectBtn) {
@@ -466,6 +462,56 @@
         }
       });
     }
+
+    // Mobile-only: Tap outside to close Connect icons
+    // Scoped strictly to mobile devices/viewports (<= 768px). Tablet (>768px and <=992px)
+    // and Laptop/Desktop (>992px) preserve their exact original behavior.
+    function isMobileViewport() {
+      return (window.matchMedia && window.matchMedia('(max-width: 768px)').matches) || (window.innerWidth <= 768);
+    }
+
+    function handleMobileOutsideTap(e) {
+      if (!isMobileViewport()) return;
+      if (!connectDropdown || !connectDropdown.classList.contains('is-open')) return;
+
+      // Containment checks: taps inside Connect button or displayed icons must NOT trigger outside dismiss
+      if (connectDropdown.contains(e.target)) return;
+      if (mainConnectBtn && mainConnectBtn.contains(e.target)) return;
+      if (connectDock && connectDock.contains(e.target)) return;
+      if (drawerConnectBtn && drawerConnectBtn.contains(e.target)) return;
+
+      // Tap is outside -> automatically close icons on mobile
+      vanishConnectDock(false, false);
+    }
+
+    var touchStartX = 0;
+    var touchStartY = 0;
+    var isSwiping = false;
+
+    document.addEventListener('touchstart', function (e) {
+      if (e.touches && e.touches.length > 0) {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+        isSwiping = false;
+      }
+    }, { passive: true });
+
+    document.addEventListener('touchmove', function (e) {
+      if (e.touches && e.touches.length > 0) {
+        var dx = Math.abs(e.touches[0].clientX - touchStartX);
+        var dy = Math.abs(e.touches[0].clientY - touchStartY);
+        if (dx > 8 || dy > 8) {
+          isSwiping = true;
+        }
+      }
+    }, { passive: true });
+
+    document.addEventListener('touchend', function (e) {
+      if (isSwiping) return;
+      handleMobileOutsideTap(e);
+    }, { passive: true });
+
+    document.addEventListener('click', handleMobileOutsideTap);
   }
 
   /**
