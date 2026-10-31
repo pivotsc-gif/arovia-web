@@ -55,8 +55,24 @@ function copyDir(src, dest) {
 copyDir(path.join(rootDir, 'css'), path.join(distDir, 'css'));
 copyDir(path.join(rootDir, 'js'), path.join(distDir, 'js'));
 copyDir(path.join(rootDir, 'assets'), path.join(distDir, 'assets'));
-if (fs.existsSync(path.join(rootDir, 'home-care'))) {
-  copyDir(path.join(rootDir, 'home-care'), path.join(distDir, 'home-care'));
-}
+// Copy clean route directories
+const routeDirs = [
+  'home-care',
+  'ambulance',
+  'medical-equipment',
+  'pharmacy',
+  'lab-tests',
+  'digital-health',
+  'contact',
+  'components',
+  'home-care-service'
+];
+
+routeDirs.forEach(dir => {
+  const srcDir = path.join(rootDir, dir);
+  if (fs.existsSync(srcDir)) {
+    copyDir(srcDir, path.join(distDir, dir));
+  }
+});
 
 console.log('✅ Synchronized all production files into dist/ successfully.');
