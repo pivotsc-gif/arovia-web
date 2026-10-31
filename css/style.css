@@ -121,7 +121,7 @@ html {
   scroll-behavior: smooth;
   scroll-padding-top: calc(var(--header-height) + 16px);
   -webkit-text-size-adjust: 100%;
-  overflow-x: hidden;
+  overflow-x: clip;
   max-width: 100%;
 }
 
@@ -134,7 +134,7 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow-x: hidden;
+  overflow-x: clip;
   max-width: 100%;
 }
 
@@ -517,7 +517,7 @@ ul, ol {
   flex-shrink: 0;
 }
 
-/* --- Top Scroll Progress Line (Subtle Brand Green Indicator — Ohana Reference) --- */
+/* --- Top Scroll Progress Line (Subtle Brand Teal Indicator) --- */
 .scroll-progress-line {
   position: fixed;
   top: 0;
@@ -527,16 +527,11 @@ ul, ol {
   background: linear-gradient(90deg, var(--color-primary, #005662) 0%, var(--color-accent, #008794) 50%, #00b4b6 100%);
   transform-origin: 0 50%;
   transform: scaleX(0);
-  opacity: 0;
+  opacity: 1;
   z-index: 1005; /* Stays fixed above sticky header (.site-header z-index: 1000) */
   pointer-events: none;
   box-shadow: 0 1px 3px rgba(0, 86, 98, 0.2);
-  transition: transform 0.08s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.2s ease-out;
-  will-change: transform, opacity;
-}
-
-.scroll-progress-line.is-active {
-  opacity: 1;
+  will-change: transform;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -554,7 +549,6 @@ ul, ol {
   background-color: var(--color-white);
   box-shadow: 0 4px 14px rgba(0, 86, 98, 0.08);
   transition: box-shadow var(--transition-normal);
-  overflow-x: clip;
 }
 
 .site-header .container {
@@ -2682,6 +2676,12 @@ ul, ol {
   min-height: clamp(540px, 72vh, 680px);
 }
 
+.hero--homecare:not(.hero-carousel__slide) .hero__title,
+.hero--homecare:not(.hero-carousel__slide) .hero__title *,
+.hero--homecare:not(.hero-carousel__slide) .hero__title .word-reveal {
+  font-family: var(--font-family-heading) !important;
+}
+
 .hero--homecare:not(.hero-carousel__slide) .hero__bg-image {
   background-image: url('../assets/images/HomeCare_HD_Image.png');
   background-position: 88% top;
@@ -4464,6 +4464,7 @@ ul, ol {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--spacing-2);
+  align-items: center;
   margin-top: auto;
 }
 
@@ -4487,6 +4488,130 @@ ul, ol {
 .btn--view-details:hover {
   background-color: var(--color-primary-light);
   color: var(--color-primary-dark);
+}
+
+/* Product Card Contact Dock — Two Circular Outlined Icons */
+.equip-card__contact-dock {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  height: 38px;
+}
+
+.equip-circle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  position: relative;
+  text-decoration: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.2s ease,
+              border-color 0.2s ease,
+              box-shadow 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.equip-circle-btn svg {
+  display: block;
+  transition: transform 0.2s ease;
+}
+
+.equip-circle-btn:hover {
+  transform: translateY(-1.5px);
+}
+
+.equip-circle-btn:hover svg {
+  transform: scale(1.08);
+}
+
+.equip-circle-btn:active {
+  transform: translateY(0);
+}
+
+/* Phone Icon: White background, thin Arovia teal outline & icon */
+.equip-circle-btn--call {
+  border: 1.5px solid #005662;
+  color: #005662;
+}
+
+.equip-circle-btn--call:hover {
+  background-color: rgba(0, 86, 98, 0.08);
+  border-color: #003840;
+  box-shadow: 0 3px 10px rgba(0, 86, 98, 0.2);
+}
+
+/* WhatsApp Icon: White background, thin WhatsApp-green outline & icon */
+.equip-circle-btn--whatsapp {
+  border: 1.5px solid #25D366;
+  color: #25D366;
+}
+
+.equip-circle-btn--whatsapp:hover {
+  background-color: rgba(37, 211, 102, 0.08);
+  border-color: #1ebe5d;
+  box-shadow: 0 3px 10px rgba(37, 211, 102, 0.22);
+}
+
+.equip-circle-btn:focus-visible {
+  outline: 2px solid #005662;
+  outline-offset: 2px;
+}
+
+/* Accessible Floating Tooltip on Hover / Focus */
+.equip-circle-btn[data-tooltip]::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: rgba(10, 45, 51, 0.94);
+  backdrop-filter: blur(4px);
+  color: #ffffff;
+  font-family: var(--font-family-sans, 'DM Sans', sans-serif);
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+  padding: 4px 8px;
+  border-radius: 5px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.16);
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+  z-index: 10;
+}
+
+.equip-circle-btn[data-tooltip]::after {
+  content: '';
+  position: absolute;
+  bottom: calc(100% + 3px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  border-width: 5px 5px 0 5px;
+  border-style: solid;
+  border-color: rgba(10, 45, 51, 0.94) transparent transparent transparent;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+  z-index: 10;
+}
+
+.equip-circle-btn:hover[data-tooltip]::before,
+.equip-circle-btn:hover[data-tooltip]::after,
+.equip-circle-btn:focus-visible[data-tooltip]::before,
+.equip-circle-btn:focus-visible[data-tooltip]::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
 }
 
 .btn--call-pricing {
@@ -4710,6 +4835,128 @@ ul, ol {
 .modal-footer__note {
   font-size: var(--font-size-xs);
   color: var(--color-text-muted);
+  flex: 1 1 280px;
+  max-width: 540px;
+}
+
+/* Premium Contact Dock in Equipment Details Modal */
+.modal-contact-dock {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.modal-dock-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  color: #ffffff;
+  position: relative;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.modal-dock-btn svg {
+  width: 22px;
+  height: 22px;
+  display: block;
+  transition: transform 0.2s ease;
+}
+
+.modal-dock-btn:hover {
+  transform: translateY(-2px);
+}
+
+.modal-dock-btn:hover svg {
+  transform: scale(1.08);
+}
+
+.modal-dock-btn:active {
+  transform: translateY(0);
+}
+
+/* Phone Button (Arovia Dark Teal #075D66) */
+.modal-dock-btn--call {
+  background-color: #075D66;
+  color: #ffffff;
+}
+
+.modal-dock-btn--call:hover {
+  background-color: #054850;
+  box-shadow: 0 6px 16px rgba(7, 93, 102, 0.36);
+}
+
+/* WhatsApp Button (WhatsApp Green #25D366) */
+.modal-dock-btn--whatsapp {
+  background-color: #25D366;
+  color: #ffffff;
+}
+
+.modal-dock-btn--whatsapp:hover {
+  background-color: #20ba5a;
+  box-shadow: 0 6px 16px rgba(37, 211, 102, 0.38);
+}
+
+.modal-dock-btn:focus-visible {
+  outline: 2px solid #005662;
+  outline-offset: 2px;
+}
+
+/* Accessible Floating Tooltip on Hover / Focus */
+.modal-dock-btn[data-tooltip]::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 9px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: rgba(10, 45, 51, 0.94);
+  backdrop-filter: blur(4px);
+  color: #ffffff;
+  font-family: var(--font-family-sans, 'DM Sans', sans-serif);
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  padding: 5px 9px;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.16);
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+  z-index: 10;
+}
+
+.modal-dock-btn[data-tooltip]::after {
+  content: '';
+  position: absolute;
+  bottom: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  border-width: 5px 5px 0 5px;
+  border-style: solid;
+  border-color: rgba(10, 45, 51, 0.94) transparent transparent transparent;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+  z-index: 10;
+}
+
+.modal-dock-btn:hover[data-tooltip]::before,
+.modal-dock-btn:hover[data-tooltip]::after,
+.modal-dock-btn:focus-visible[data-tooltip]::before,
+.modal-dock-btn:focus-visible[data-tooltip]::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
 }
 
 /* Catalog Terms / Policies Card */
@@ -4765,7 +5012,8 @@ ul, ol {
     min-height: 180px;
   }
   .equip-card__actions {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
   }
 }
 
@@ -4970,6 +5218,7 @@ ul, ol {
   will-change: opacity, transform;
   animation: textWordReveal 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   animation-delay: calc(140ms + var(--word-index, 0) * 65ms);
+  font-family: inherit !important;
 }
 
 @keyframes textWordReveal {
@@ -8170,12 +8419,187 @@ html:not(.js-loaded) .hero__image-anim {
    Home Care Page — Complete Services UI & Interactive Features (Ohana Style)
    ========================================================================== */
 
-/* 1. Category Switcher Bar (Immediately Below Hero) */
+/* 1. Pivot-Style Sticky Category & Numbered Service Navigation */
 .hc-services-hub-section {
-  padding-top: var(--spacing-8, 32px);
+  padding-top: 0;
   padding-bottom: var(--spacing-16, 64px);
   background-color: var(--color-bg, #f8fafc);
   scroll-margin-top: 100px;
+}
+
+/* Full-Width Sticky Navigation Bar */
+.hc-sticky-nav-bar {
+  position: -webkit-sticky;
+  position: sticky;
+  top: var(--site-header-height, 80px);
+  z-index: 900;
+  width: 100%;
+  background-color: #ffffff;
+  padding: 16px 0 0;
+  border-bottom: 1px solid rgba(0, 86, 98, 0.12);
+  transition: box-shadow 0.25s ease;
+}
+
+.hc-sticky-nav-bar.is-stuck {
+  box-shadow: 0 6px 20px rgba(0, 50, 60, 0.08);
+}
+
+.hc-sticky-nav-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.hc-sticky-nav-inner .hc-category-switcher {
+  margin-bottom: 14px;
+}
+
+/* Second-Level Service Navigation (Pivot Style) */
+.hc-service-subnav {
+  width: 100%;
+  max-width: 1160px;
+  position: relative;
+}
+
+.hc-service-subnav__group {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  width: 100%;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hc-subnav-item {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 8px 12px 14px;
+  text-decoration: none;
+  position: relative;
+  cursor: pointer;
+  border-radius: 8px 8px 0 0;
+  transition: all 0.2s ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.hc-subnav-item:hover {
+  background-color: rgba(0, 86, 98, 0.04);
+}
+
+.hc-subnav-item__num {
+  display: inline-block;
+  font-family: var(--font-family-sans, 'DM Sans', sans-serif);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #007788;
+  margin-bottom: 4px;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.hc-subnav-item__name {
+  font-family: var(--font-family-sans, 'DM Sans', sans-serif);
+  font-size: 0.94rem;
+  font-weight: 600;
+  line-height: 1.32;
+  color: #334155;
+  transition: color 0.2s ease;
+}
+
+.hc-subnav-item:hover .hc-subnav-item__num,
+.hc-subnav-item:hover .hc-subnav-item__name {
+  color: #005662;
+}
+
+/* Active Teal Underline Indicator */
+.hc-subnav-item__indicator {
+  position: absolute;
+  bottom: 0;
+  left: 8%;
+  right: 8%;
+  height: 3px;
+  background-color: #007788;
+  border-radius: 3px 3px 0 0;
+  opacity: 0;
+  transform: scaleX(0.2);
+  transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hc-subnav-item--active .hc-subnav-item__num {
+  color: #005662;
+  font-weight: 800;
+  transform: translateY(-1px);
+}
+
+.hc-subnav-item--active .hc-subnav-item__name {
+  color: #005662;
+  font-weight: 700;
+}
+
+.hc-subnav-item--active .hc-subnav-item__indicator {
+  opacity: 1;
+  transform: scaleX(1);
+  background-color: #007788;
+  box-shadow: 0 1px 4px rgba(0, 119, 136, 0.35);
+}
+
+.hc-subnav-item:focus-visible {
+  outline: 2px solid #007788;
+  outline-offset: 2px;
+}
+
+@media (max-width: 900px) {
+  .hc-sticky-nav-bar {
+    padding: 12px 0 0;
+    top: var(--site-header-height, 64px);
+  }
+  .hc-sticky-nav-inner .hc-category-switcher {
+    margin-bottom: 10px;
+  }
+  .hc-service-subnav {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    width: 100%;
+    padding: 0 12px;
+  }
+  .hc-service-subnav::-webkit-scrollbar {
+    display: none;
+  }
+  .hc-service-subnav__group {
+    display: flex;
+    flex-wrap: nowrap;
+    width: max-content;
+    min-width: 100%;
+    justify-content: flex-start;
+    gap: 10px;
+  }
+  .hc-subnav-item {
+    flex: 0 0 auto;
+    min-width: 180px;
+    max-width: 230px;
+    padding: 6px 12px 10px;
+  }
+  .hc-subnav-item__num {
+    font-size: 0.76rem;
+  }
+  .hc-subnav-item__name {
+    font-size: 0.85rem;
+    white-space: normal;
+  }
+  .hc-subnav-item__indicator {
+    left: 4px;
+    right: 4px;
+  }
 }
 
 .hc-category-nav-wrap {
@@ -8263,7 +8687,8 @@ html:not(.js-loaded) .hero__image-anim {
 }
 
 .hc-category-subtext {
-  margin-top: 18px;
+  margin: 24px auto 36px;
+  text-align: center;
   max-width: 780px;
 }
 
@@ -8297,7 +8722,7 @@ html:not(.js-loaded) .hero__image-anim {
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
   position: relative;
   overflow: hidden;
-  scroll-margin-top: 130px;
+  scroll-margin-top: calc(var(--site-header-height, 80px) + var(--hc-sticky-nav-height, 125px) + 24px);
 }
 
 .hc-service-item--targeted {
@@ -9275,7 +9700,12 @@ html:not(.js-loaded) .hero__image-anim {
 /* 1. All Headings: Hero Titles, Section Headings, Service Titles, Modal Headings */
 h1, h2, h3, h4, h5, h6,
 .hero__title,
+.hero__title *,
 .hero--indimac .hero__title,
+.hero--indimac .hero__title *,
+.hero--homecare .hero__title,
+.hero--homecare .hero__title *,
+.word-reveal,
 .page-header__title,
 .subpage-hero__title,
 .hc-detail-hero__title,
@@ -9333,7 +9763,7 @@ h2, h3, h4,
 }
 
 /* 2. DM Sans for Body, Navigation, Buttons, Descriptions, Feature Labels, Forms, Details */
-body, p, span, li,
+body, p, span:not(.word-reveal), li,
 a, .main-nav__link, .mobile-nav__link, .nav-link,
 button, .btn, .btn-primary, .btn-secondary, .btn--connect, .btn--know-more, .hc-btn--view-details,
 input, textarea, select,

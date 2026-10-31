@@ -10,17 +10,60 @@
 
   function initHomeCareServicesHub() {
     // -------------------------------------------------------------
-    // 1. Category Filter Switching Logic
+    // 1. Pivot-Style Sticky Category & Numbered Service Navigation
     // -------------------------------------------------------------
     const btnClinical = document.getElementById('btnClinicalCare');
     const btnNonClinical = document.getElementById('btnNonClinicalCare');
     const introClinical = document.getElementById('introClinical');
     const introNonClinical = document.getElementById('introNonClinical');
     const serviceItems = document.querySelectorAll('.hc-service-item');
+    const subnavClinical = document.getElementById('subnavClinical');
+    const subnavNonClinical = document.getElementById('subnavNonClinical');
+    const stickyNavBar = document.getElementById('hcStickyNavBar');
+    const serviceSubnav = document.getElementById('hcServiceSubnav');
 
     let currentCategory = 'clinical';
+    let isClickScrolling = false;
+    let clickScrollTimer = null;
 
-    function setCategory(category) {
+    function updateStickyOffsets() {
+      const siteHeader = document.querySelector('.site-header');
+      const siteHeaderHeight = siteHeader ? siteHeader.offsetHeight : 80;
+      const stickyBarHeight = stickyNavBar ? stickyNavBar.offsetHeight : 120;
+      document.documentElement.style.setProperty('--site-header-height', siteHeaderHeight + 'px');
+      document.documentElement.style.setProperty('--hc-sticky-nav-height', stickyBarHeight + 'px');
+      return { siteHeaderHeight, stickyBarHeight, total: siteHeaderHeight + stickyBarHeight };
+    }
+
+    function setActiveSubnavItem(targetId) {
+      const activeGroup = currentCategory === 'clinical' ? subnavClinical : subnavNonClinical;
+      if (!activeGroup) return;
+
+      const items = activeGroup.querySelectorAll('.hc-subnav-item');
+      items.forEach(item => {
+        const itemTarget = item.getAttribute('data-target') || item.getAttribute('href').replace('#', '');
+        const isActive = itemTarget === targetId;
+        item.classList.toggle('hc-subnav-item--active', isActive);
+        item.setAttribute('aria-selected', isActive ? 'true' : 'false');
+
+        if (isActive && serviceSubnav) {
+          // If mobile horizontal scroll, bring active item into view
+          const itemLeft = item.offsetLeft;
+          const itemRight = itemLeft + item.offsetWidth;
+          const scrollLeft = serviceSubnav.scrollLeft;
+          const clientWidth = serviceSubnav.clientWidth;
+
+          if (itemLeft < scrollLeft) {
+            serviceSubnav.scrollTo({ left: Math.max(0, itemLeft - 16), behavior: 'smooth' });
+          } else if (itemRight > scrollLeft + clientWidth) {
+            serviceSubnav.scrollTo({ left: itemRight - clientWidth + 16, behavior: 'smooth' });
+          }
+        }
+      });
+    }
+
+    function setCategory(category, options) {
+      options = options || {};
       currentCategory = category;
       const isClinical = category === 'clinical';
 
@@ -33,6 +76,10 @@
         btnNonClinical.classList.toggle('hc-category-btn--active', !isClinical);
         btnNonClinical.setAttribute('aria-selected', !isClinical ? 'true' : 'false');
       }
+
+      // Toggle Second-level Subnav Groups
+      if (subnavClinical) subnavClinical.style.display = isClinical ? 'flex' : 'none';
+      if (subnavNonClinical) subnavNonClinical.style.display = !isClinical ? 'flex' : 'none';
 
       // Update Subtext Intros
       if (introClinical) introClinical.style.display = isClinical ? 'block' : 'none';
@@ -48,7 +95,119 @@
           item.style.display = 'none';
         }
       });
+
+      // Activate subnav item
+      const activeGroup = isClinical ? subnavClinical : subnavNonClinical;
+      if (activeGroup) {
+        const targetItem = options.targetId
+          ? activeGroup.querySelector('[data-target="' + options.targetId + '"]')
+          : activeGroup.querySelector('.hc-subnav-item');
+        if (targetItem) {
+          const targetId = targetItem.getAttribute('data-target') || targetItem.getAttribute('href').replace('#', '');
+          setActiveSubnavItem(targetId);
+        }
+      }
+
+      updateStickyOffsets();
     }
+
+    function scrollToService(targetId) {
+      const targetEl = document.getElementById(targetId);
+      if (!targetEl) return;
+
+      const cat = targetEl.getAttribute('data-category');
+      if (cat && cat !== currentCategory) {
+        setCategory(cat, { targetId: targetId });
+      } else {
+        setActiveSubnavItem(targetId);
+      }
+
+      const offsets = updateStickyOffsets();
+      const rect = targetEl.getBoundingClientRect();
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const targetY = rect.top + scrollTop - offsets.total - 18;
+
+      isClickScrolling = true;
+      clearTimeout(clickScrollTimer);
+      clickScrollTimer = setTimeout(function() {
+        isClickScrolling = false;
+      }, 850);
+
+      window.scrollTo({
+        top: Math.max(0, targetY),
+        behavior: 'smooth'
+      });
+
+      if (history.replaceState) {
+        history.replaceState(null, '', '#' + targetId);
+      }
+    }
+
+    // Click handler for Level 2 Subnav items
+    document.addEventListener('click', function(e) {
+      const subnavLink = e.target.closest('.hc-subnav-item');
+      if (subnavLink) {
+        e.preventDefault();
+        const targetId = subnavLink.getAttribute('data-target') || subnavLink.getAttribute('href').replace('#', '');
+        if (targetId) {
+          scrollToService(targetId);
+        }
+      }
+    });
+
+    // Scroll-Spy & Sticky state handler
+    let scrollSpyTicking = false;
+
+    function handleScrollSpy() {
+      const offsets = updateStickyOffsets();
+
+      // Toggle stuck shadow on sticky bar
+      if (stickyNavBar) {
+        const barTop = stickyNavBar.getBoundingClientRect().top;
+        if (barTop <= offsets.siteHeaderHeight + 2) {
+          stickyNavBar.classList.add('is-stuck');
+        } else {
+          stickyNavBar.classList.remove('is-stuck');
+        }
+      }
+
+      if (isClickScrolling) return;
+
+      // Detect active service among visible category cards
+      const visibleCards = Array.from(serviceItems).filter(function(item) {
+        return item.getAttribute('data-category') === currentCategory && item.style.display !== 'none';
+      });
+
+      if (visibleCards.length === 0) return;
+
+      const threshold = offsets.total + 60;
+      let currentActiveId = visibleCards[0].id;
+
+      for (let i = 0; i < visibleCards.length; i++) {
+        const card = visibleCards[i];
+        const rect = card.getBoundingClientRect();
+        if (rect.top <= threshold) {
+          currentActiveId = card.id;
+        } else {
+          break;
+        }
+      }
+
+      setActiveSubnavItem(currentActiveId);
+    }
+
+    function onWindowScroll() {
+      if (!scrollSpyTicking) {
+        window.requestAnimationFrame(function() {
+          handleScrollSpy();
+          scrollSpyTicking = false;
+        });
+        scrollSpyTicking = true;
+      }
+    }
+
+    window.addEventListener('scroll', onWindowScroll, { passive: true });
+    window.addEventListener('resize', updateStickyOffsets, { passive: true });
 
     if (btnClinical) {
       btnClinical.addEventListener('click', function(e) {
@@ -70,6 +229,8 @@
 
     // Default to Clinical Care on page load
     setCategory('clinical');
+    updateStickyOffsets();
+    handleScrollSpy();
 
     // -------------------------------------------------------------
     // 2. Comprehensive Scrollable Service Details Modal
@@ -318,17 +479,7 @@
           }
           // Smooth scroll accounting for sticky navbar & topbar
           setTimeout(() => {
-            const headerEl = document.querySelector('.site-header');
-            const topbarEl = document.querySelector('.topbar');
-            const offset = (headerEl ? headerEl.offsetHeight : 80) + (topbarEl ? topbarEl.offsetHeight : 0) + 24;
-            const rect = targetEl.getBoundingClientRect();
-            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            const targetY = rect.top + scrollTop - offset;
-
-            window.scrollTo({
-              top: Math.max(0, targetY),
-              behavior: 'smooth'
-            });
+            scrollToService(targetId);
 
             // Focus & visual highlight
             targetEl.classList.add('hc-service-item--targeted');

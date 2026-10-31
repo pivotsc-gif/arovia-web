@@ -530,124 +530,618 @@
   border-bottom: 1px solid #dce5e8;
 }
 
-.dh-sol-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 32px;
+/* --------------------------------------------------------------------------
+   Numbered Alternating Pivot Services & Details Modal (Reference Style)
+   -------------------------------------------------------------------------- */
+.dh-num-cards-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  margin-top: 50px;
 }
 
-.dh-sol-card {
+/* Card Wrapper with Alternating Alignment */
+.dh-num-card-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+@media (min-width: 992px) {
+  .dh-num-card-wrapper--left {
+    max-width: 96%;
+    margin-right: auto;
+    margin-left: 0;
+  }
+  .dh-num-card-wrapper--right {
+    max-width: 96%;
+    margin-left: auto;
+    margin-right: 0;
+  }
+}
+
+/* Prominent Sequential Number Badges */
+.dh-num-badge {
+  position: absolute;
+  top: -18px;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading, serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+  z-index: 5;
+  user-select: none;
+  border: 3px solid #ffffff;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dh-num-card-wrapper--left .dh-num-badge {
+  left: -14px;
+}
+
+.dh-num-card-wrapper--right .dh-num-badge {
+  right: -14px;
+}
+
+.dh-num-badge--teal {
+  background: #005662;
+  color: #ffffff;
+  box-shadow: 0 6px 18px rgba(0, 86, 98, 0.4);
+}
+
+.dh-num-badge--cyan {
+  background: #008794;
+  color: #ffffff;
+  box-shadow: 0 6px 18px rgba(0, 135, 148, 0.4);
+}
+
+.dh-num-card-wrapper:hover .dh-num-badge {
+  transform: scale(1.08);
+}
+
+/* Horizontal Service Card Base */
+.dh-num-card {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 330px;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dh-num-card-wrapper:hover .dh-num-card {
+  transform: translateY(-4px);
+}
+
+/* Dark Card (01, 03) */
+.dh-num-card--dark {
+  background: linear-gradient(135deg, #07525c 0%, #033c44 100%);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 12px 32px rgba(0, 40, 46, 0.15);
+}
+
+.dh-num-card-wrapper:hover .dh-num-card--dark {
+  box-shadow: 0 22px 48px rgba(0, 40, 46, 0.25);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* White Card (02, 04) */
+.dh-num-card--white {
   background: #ffffff;
+  color: #102126;
   border: 1px solid #d3e1e5;
-  border-radius: 14px;
-  padding: 36px;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
-  transition: all 0.3s ease;
+  box-shadow: 0 8px 30px rgba(0, 86, 98, 0.07);
+}
+
+.dh-num-card-wrapper:hover .dh-num-card--white {
+  box-shadow: 0 20px 44px rgba(0, 86, 98, 0.14);
+  border-color: #008794;
+}
+
+/* Card Internal Content */
+.dh-num-card__content {
+  padding: 44px 42px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  z-index: 2;
+}
+
+.dh-num-card__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.dh-num-card__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+.dh-num-card--dark .dh-num-card__icon {
+  color: #5ce0ec;
+}
+
+.dh-num-card--white .dh-num-card__icon {
+  color: #005662;
+}
+
+.dh-num-card__title {
+  font-family: var(--font-heading, serif);
+  font-size: 1.55rem;
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 0;
+}
+
+.dh-num-card--dark .dh-num-card__title {
+  color: #ffffff;
+}
+
+.dh-num-card--white .dh-num-card__title {
+  color: #102126;
+}
+
+.dh-num-card__tagline {
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 12px;
+}
+
+.dh-num-card--dark .dh-num-card__tagline {
+  color: #6dd3db;
+}
+
+.dh-num-card--white .dh-num-card__tagline {
+  color: #008794;
+}
+
+.dh-num-card__desc {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 0 0 24px 0;
+}
+
+.dh-num-card--dark .dh-num-card__desc {
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.dh-num-card--white .dh-num-card__desc {
+  color: #4b6169;
+}
+
+/* Action & Buttons */
+.dh-num-card__action {
+  margin-top: auto;
+}
+
+.dh-num-btn {
+  padding: 11px 26px;
+  border-radius: 9999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  transition: transform 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.dh-num-btn__arrow {
+  display: inline-block;
+  transition: transform 0.25s ease;
+}
+
+.dh-num-btn:hover .dh-num-btn__arrow {
+  transform: translateX(4px);
+}
+
+.dh-num-btn--light {
+  background: #ffffff;
+  color: #005662;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+}
+
+.dh-num-btn--light:hover {
+  background: #e6f4f5;
+  color: #003e47;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.dh-num-btn--dark {
+  background: #005662;
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(0, 86, 98, 0.25);
+}
+
+.dh-num-btn--dark:hover {
+  background: #008794;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 86, 98, 0.35);
+}
+
+/* Media / Image Column */
+.dh-num-card__media {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  min-height: 280px;
+}
+
+.dh-num-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dh-num-card-wrapper:hover .dh-num-card__img {
+  transform: scale(1.05);
+}
+
+.dh-num-card__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.dh-num-card__overlay--dark {
+  background: linear-gradient(to right, rgba(7, 82, 92, 0.45) 0%, rgba(7, 82, 92, 0) 35%);
+}
+
+.dh-num-card-wrapper--right .dh-num-card__overlay--dark {
+  background: linear-gradient(to left, rgba(7, 82, 92, 0.45) 0%, rgba(7, 82, 92, 0) 35%);
+}
+
+.dh-num-card__overlay--light {
+  background: linear-gradient(to right, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 30%);
+}
+
+/* Responsive Breakpoints for Numbered Cards */
+@media (max-width: 991px) {
+  .dh-num-cards-stack {
+    gap: 40px;
+  }
+
+  .dh-num-card {
+    grid-template-columns: 1fr;
+  }
+
+  .dh-num-card__content {
+    padding: 34px 28px;
+    order: 2;
+  }
+
+  .dh-num-card__media {
+    order: 1;
+    height: 240px;
+    min-height: 240px;
+  }
+
+  .dh-num-card--white .dh-num-card__media {
+    order: 1;
+  }
+
+  .dh-num-card--white .dh-num-card__content {
+    order: 2;
+  }
+}
+
+@media (max-width: 600px) {
+  .dh-num-cards-stack {
+    gap: 36px;
+    margin-top: 36px;
+  }
+
+  .dh-num-badge {
+    width: 44px;
+    height: 44px;
+    font-size: 1.05rem;
+    top: -14px;
+  }
+
+  .dh-num-card-wrapper--left .dh-num-badge {
+    left: -8px;
+  }
+
+  .dh-num-card-wrapper--right .dh-num-badge {
+    right: -8px;
+  }
+
+  .dh-num-card__title {
+    font-size: 1.3rem;
+  }
+
+  .dh-num-card__content {
+    padding: 28px 20px;
+  }
+
+  .dh-num-card__media {
+    height: 200px;
+    min-height: 200px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Digital Health Service Details Modal (Reference Style)
+   -------------------------------------------------------------------------- */
+.dh-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(8, 25, 30, 0.78);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.dh-modal-backdrop.dh-modal--open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.dh-modal-container {
+  background: #ffffff;
+  border-radius: 18px;
+  max-width: 860px;
+  width: 100%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+  transform: scale(0.95) translateY(12px);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dh-modal-backdrop.dh-modal--open .dh-modal-container {
+  transform: scale(1) translateY(0);
+}
+
+.dh-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 1px solid #e8f0f2;
+  background: #ffffff;
+}
+
+.dh-modal__header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dh-modal__header-icon {
+  display: inline-flex;
+  align-items: center;
+  color: #005662;
+}
+
+.dh-modal__header-title {
+  font-family: var(--font-heading, serif);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #005662;
+}
+
+.dh-modal__close {
+  background: transparent;
+  border: none;
+  font-size: 1.8rem;
+  line-height: 1;
+  color: #718096;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: color 0.2s, background-color 0.2s;
+}
+
+.dh-modal__close:hover,
+.dh-modal__close:focus-visible {
+  color: #102126;
+  background: #f0f4f5;
+  outline: none;
+}
+
+.dh-modal__body {
+  padding: 24px;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 24px;
+  overflow-y: auto;
+  max-height: calc(90vh - 140px);
+}
+
+.dh-modal__media {
+  width: 100%;
+  height: 100%;
+  min-height: 220px;
+}
+
+.dh-modal__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.dh-modal__content {
   display: flex;
   flex-direction: column;
 }
 
-.dh-sol-card:hover {
-  border-color: #008794;
-  box-shadow: 0 16px 36px rgba(0, 86, 98, 0.1);
-  transform: translateY(-3px);
-}
-
-.dh-sol-card__header {
-  display: flex;
-  align-items: flex-start;
-  gap: 18px;
-  margin-bottom: 18px;
-}
-
-.dh-sol-card__badge {
-  width: 48px;
-  height: 48px;
-  border-radius: 10px;
-  background: #e6f4f5;
-  color: #005662;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.dh-sol-card__meta h3 {
-  font-size: 1.35rem;
+.dh-modal__title {
+  font-family: var(--font-heading, serif);
+  font-size: 1.45rem;
   font-weight: 700;
   color: #102126;
-  margin-bottom: 4px;
+  margin: 0 0 4px 0;
 }
 
-.dh-sol-card__tagline {
+.dh-modal__tagline {
   font-size: 0.85rem;
   font-weight: 600;
   color: #008794;
+  margin-bottom: 12px;
 }
 
-.dh-sol-card__desc {
-  font-size: 0.96rem;
-  line-height: 1.65;
+.dh-modal__desc {
+  font-size: 0.92rem;
+  line-height: 1.6;
   color: #4b6169;
-  margin-bottom: 22px;
+  margin: 0 0 16px 0;
 }
 
-.dh-sol-card__includes-title {
-  font-size: 0.82rem;
+.dh-modal__divider {
+  border: none;
+  border-top: 1px solid #e8f0f2;
+  margin: 0 0 16px 0;
+}
+
+.dh-modal__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.dh-modal__subhead {
+  font-size: 0.76rem;
   font-weight: 700;
-  color: #102126;
+  color: #005662;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
   margin-bottom: 10px;
 }
 
-.dh-sol-card__list {
+.dh-modal__list {
   list-style: none;
   padding: 0;
-  margin: 0 0 24px 0;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 9px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.dh-sol-card__list-item {
+.dh-modal__list-item {
+  font-size: 0.84rem;
+  line-height: 1.45;
+  color: #374151;
   display: flex;
   align-items: flex-start;
-  gap: 10px;
-  font-size: 0.9rem;
-  color: #3b5057;
-  line-height: 1.45;
+  gap: 8px;
 }
 
-.dh-sol-card__check {
+.dh-modal__check {
   color: #008794;
-  margin-top: 2px;
+  font-weight: 700;
   flex-shrink: 0;
 }
 
-.dh-sol-card__footer {
-  margin-top: auto;
-  padding-top: 20px;
-  border-top: 1px solid #edf2f4;
+.dh-modal__footer {
+  padding: 16px 24px;
+  border-top: 1px solid #e8f0f2;
+  background: #fbfdfe;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 14px;
 }
 
-.dh-sol-card__btn {
+.dh-modal__btn-primary {
+  background: #005662;
+  color: #ffffff;
+  padding: 10px 22px;
+  border-radius: 8px;
   font-size: 0.9rem;
   font-weight: 600;
-  color: #005662;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  transition: gap 0.2s ease, color 0.2s ease;
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
-.dh-sol-card__btn:hover {
-  gap: 10px;
-  color: #008794;
+.dh-modal__btn-primary:hover {
+  background: #008794;
+  transform: translateY(-1px);
+}
+
+.dh-modal__btn-secondary {
+  background: #ffffff;
+  color: #005662;
+  border: 1px solid #005662;
+  padding: 9px 20px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.dh-modal__btn-secondary:hover {
+  background: #e6f4f5;
+  color: #003e47;
+}
+
+@media (max-width: 768px) {
+  .dh-modal__body {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .dh-modal__media {
+    height: 180px;
+    min-height: 180px;
+  }
+
+  .dh-modal__grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .dh-modal__footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .dh-modal__btn-primary,
+  .dh-modal__btn-secondary {
+    justify-content: center;
+  }
 }
 
 /* --------------------------------------------------------------------------

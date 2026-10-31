@@ -15,22 +15,22 @@ window.AROVIA_SOCIAL_CONFIG = {
   instagram: {
     id: 'instagram',
     name: 'Instagram',
-    handle: '@aroviahealthcare',
+    handle: '@arovia_homecare',
     meta: 'Health tips & service updates',
     // Insert verified URL here, e.g. 'https://www.instagram.com/aroviahealthcare'
-    url: null,
-    statusText: 'Coming Soon',
-    comingSoonMessage: 'Arovia’s official Instagram channel is coming soon. For care services, call our helpline.'
+    url: 'https://www.instagram.com/arovia_homecare?utm_source=qr&obrf=cGlpanF5ZW5kMGM0',
+    statusText: 'Official Profile',
+    comingSoonMessage: null
   },
   youtube: {
     id: 'youtube',
     name: 'YouTube',
-    handle: 'Arovia Healthcare',
+    handle: '@arovia_homecareservices',
     meta: 'Care guides & patient education',
     // Insert verified URL here, e.g. 'https://www.youtube.com/@AroviaHealthcare'
-    url: null,
-    statusText: 'Coming Soon',
-    comingSoonMessage: 'Arovia’s official YouTube channel is coming soon. For care services, call our helpline.'
+    url: 'https://youtube.com/@arovia_homecareservices?si=G9FTV7dmVCOyWMSB',
+    statusText: 'Official Channel',
+    comingSoonMessage: null
   },
   facebook: {
     id: 'facebook',
@@ -38,8 +38,8 @@ window.AROVIA_SOCIAL_CONFIG = {
     handle: 'Arovia Healthcare Services',
     meta: 'Community news & care announcements',
     // Insert verified URL here, e.g. 'https://www.facebook.com/aroviahealthcare'
-    url: null,
-    statusText: 'Coming Soon',
-    comingSoonMessage: 'Arovia’s official Facebook page is coming soon. For care services, call our helpline.'
+    url: 'https://www.facebook.com/profile.php?id=61596182516516',
+    statusText: 'Official Page',
+    comingSoonMessage: null
   }
 };

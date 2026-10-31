@@ -14,7 +14,7 @@
  *    - Medical Equipment (28 items, international export only, strict no-online-prices policy)
  *    - Pharmacy (Prescription requirement, verified inquiry, no medical prescribing)
  *    - Lab Tests (Home sample collection by trained professionals, test packages, phone inquiry)
- *    - Contact (Direct phone-first coordination: +91 96496 48430, Guntur, AP)
+ *    - Contact (Direct phone-first coordination: +91 96496 48501, Guntur, AP)
  * 5. Clickable internal links, working tel: action buttons, and keyboard accessibility
  * 6. Dual-engine architecture: resilient client-side NLU with optional /api/chat hook
  */
@@ -23,9 +23,9 @@
   'use strict';
 
   // Authoritative Brand Constants
-  var AROVIA_PHONE_DISPLAY = '+91 96496 48430';
-  var AROVIA_PHONE_URI = 'tel:+919649648430';
-  var AROVIA_WHATSAPP_URI = 'https://wa.me/919649648430?text=Hello%20Arovia%2C%20I%20would%20like%20to%20know%20more%20about%20your%20healthcare%20services.';
+  var AROVIA_PHONE_DISPLAY = '+91 96496 48501';
+  var AROVIA_PHONE_URI = 'tel:+919649648501';
+  var AROVIA_WHATSAPP_URI = 'https://wa.me/919649648501?text=Hello%20Arovia%2C%20I%20would%20like%20to%20know%20more%20about%20your%20healthcare%20services.';
   var AROVIA_EMAIL = 'arovia22@gmail.com';
   var AROVIA_LOCATION = 'Guntur, Andhra Pradesh';
   var AROVIA_ADDRESS = 'Shop No.26, Ground Floor, Annapurna Complex, Kakani Road, Guntur - 522 001, AP, India';
@@ -57,13 +57,13 @@
         lastService: conversationState.lastService
       };
       sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(stateToSave));
-    } catch (e) {}
+    } catch (e) { }
   }
 
   function clearSessionState() {
     try {
       sessionStorage.removeItem(SESSION_STORAGE_KEY);
-    } catch (e) {}
+    } catch (e) { }
   }
 
   function getSavedSessionState() {
@@ -75,7 +75,7 @@
           return parsed;
         }
       }
-    } catch (e) {}
+    } catch (e) { }
     return null;
   }
 
@@ -430,9 +430,9 @@
     if (isLocationCoverageQuery) {
       return {
         text: "Arovia coordinates healthcare services across verified coverage areas:\n\n" +
-              "• **Local Home Healthcare & Transit (Guntur):** Direct home care (caregivers and registered nurses), non-emergency ambulance patient transit, home lab sample collection, and prescription medicine delivery are actively provided throughout **Guntur, Andhra Pradesh** and immediately surrounding areas.\n\n" +
-              "• **Medical Equipment Export:** Hospital beds, ICU equipment, and patient mobility devices are supplied exclusively for **international healthcare export** to institutional buyers and overseas destinations.\n\n" +
-              "If you are outside these areas or wish to check if staff can be dispatched to your exact address, please contact our coordination desk.",
+          "• **Local Home Healthcare & Transit (Guntur):** Direct home care (caregivers and registered nurses), non-emergency ambulance patient transit, home lab sample collection, and prescription medicine delivery are actively provided throughout **Guntur, Andhra Pradesh** and immediately surrounding areas.\n\n" +
+          "• **Medical Equipment Export:** Hospital beds, ICU equipment, and patient mobility devices are supplied exclusively for **international healthcare export** to institutional buyers and overseas destinations.\n\n" +
+          "If you are outside these areas or wish to check if staff can be dispatched to your exact address, please contact our coordination desk.",
         actions: [
           { label: 'Call Helpline: ' + AROVIA_PHONE_DISPLAY, url: AROVIA_PHONE_URI, isCall: true },
           { label: 'WhatsApp Inquiry', url: AROVIA_WHATSAPP_URI, isWhatsApp: true },
@@ -458,12 +458,12 @@
     if (isServicesOverview) {
       return {
         text: "Arovia coordinates five essential healthcare services:\n\n" +
-              "1. **Home Care:** Dedicated personal attendants for daily living assistance (bathing, meals, mobility, companionship) and registered nurses for physician-prescribed clinical nursing (injections, IV therapy, sterile wound dressings, vitals monitoring).\n" +
-              "2. **Ambulance Services:** Assisted non-emergency transit for planned hospital admissions, diagnostic appointments, and inter-facility transfers.\n" +
-              "3. **Medical Equipment:** 28 hospital-grade equipment items (electric ICU beds, hydraulic recovery stretchers, wheelchairs) supplied for international export.\n" +
-              "4. **Pharmacy Services:** Prescription and chronic maintenance medicine coordination with required doctor prescription verification.\n" +
-              "5. **Diagnostic Lab Tests:** Comprehensive screening packages and individual blood tests with trained phlebotomists collecting samples at your home.\n\n" +
-              "Which service would you like to explore or arrange?",
+          "1. **Home Care:** Dedicated personal attendants for daily living assistance (bathing, meals, mobility, companionship) and registered nurses for physician-prescribed clinical nursing (injections, IV therapy, sterile wound dressings, vitals monitoring).\n" +
+          "2. **Ambulance Services:** Assisted non-emergency transit for planned hospital admissions, diagnostic appointments, and inter-facility transfers.\n" +
+          "3. **Medical Equipment:** 28 hospital-grade equipment items (electric ICU beds, hydraulic recovery stretchers, wheelchairs) supplied for international export.\n" +
+          "4. **Pharmacy Services:** Prescription and chronic maintenance medicine coordination with required doctor prescription verification.\n" +
+          "5. **Diagnostic Lab Tests:** Comprehensive screening packages and individual blood tests with trained phlebotomists collecting samples at your home.\n\n" +
+          "Which service would you like to explore or arrange?",
         actions: [
           { label: 'Explore Services', url: 'index.html#services' },
           { label: 'Call Helpline: ' + AROVIA_PHONE_DISPLAY, url: AROVIA_PHONE_URI, isCall: true },
@@ -483,11 +483,11 @@
       conversationState.lastService = 'home-care';
       return {
         text: "Booking home healthcare with Arovia is straightforward and managed through our direct coordination desk without complicated forms or app logins:\n\n" +
-              "1. **Call our Coordination Desk:** Contact our team directly at **" + AROVIA_PHONE_DISPLAY + "** with your patient's routine needs and physician instructions.\n" +
-              "2. **Care Assessment & Guidance:** We guide you on whether a dedicated **Caregiver** (for non-clinical daily living support like bathing, feeding, and mobility) or a **Registered Nurse** (for injections, IV therapy, sterile wound dressings, and vitals) is appropriate, along with shift schedules (daytime, overnight, or 24/7).\n" +
-              "3. **Transparent Confirmation:** Duties, schedule, and published charges are agreed before care begins.\n" +
-              "4. **Care Commences at Home:** Qualified care personnel are scheduled and arrive at your home according to the agreed schedule.\n\n" +
-              "Speak directly with our home care coordinators to settle your care requirements today.",
+          "1. **Call our Coordination Desk:** Contact our team directly at **" + AROVIA_PHONE_DISPLAY + "** with your patient's routine needs and physician instructions.\n" +
+          "2. **Care Assessment & Guidance:** We guide you on whether a dedicated **Caregiver** (for non-clinical daily living support like bathing, feeding, and mobility) or a **Registered Nurse** (for injections, IV therapy, sterile wound dressings, and vitals) is appropriate, along with shift schedules (daytime, overnight, or 24/7).\n" +
+          "3. **Transparent Confirmation:** Duties, schedule, and published charges are agreed before care begins.\n" +
+          "4. **Care Commences at Home:** Qualified care personnel are scheduled and arrive at your home according to the agreed schedule.\n\n" +
+          "Speak directly with our home care coordinators to settle your care requirements today.",
         actions: [
           { label: 'Call Care Desk: ' + AROVIA_PHONE_DISPLAY, url: AROVIA_PHONE_URI, isCall: true },
           { label: 'WhatsApp Care Desk', url: AROVIA_WHATSAPP_URI, isWhatsApp: true },
@@ -515,11 +515,11 @@
     if (isContactQuery) {
       return {
         text: "You can contact Arovia directly through our published communication channels:\n\n" +
-              "• **Phone Helpline:** **" + AROVIA_PHONE_DISPLAY + "** (Direct telephone coordination)\n" +
-              "• **WhatsApp:** **" + AROVIA_PHONE_DISPLAY + "**\n" +
-              "• **Email Inquiries:** **" + AROVIA_EMAIL + "**\n" +
-              "• **Registered Office:** " + AROVIA_ADDRESS + "\n\n" +
-              "**Direct Coordination Model:** We coordinate care directly over phone and WhatsApp so you can speak immediately with a real healthcare coordinator without waiting for automated bots or web forms.",
+          "• **Phone Helpline:** **" + AROVIA_PHONE_DISPLAY + "** (Direct telephone coordination)\n" +
+          "• **WhatsApp:** **" + AROVIA_PHONE_DISPLAY + "**\n" +
+          "• **Email Inquiries:** **" + AROVIA_EMAIL + "**\n" +
+          "• **Registered Office:** " + AROVIA_ADDRESS + "\n\n" +
+          "**Direct Coordination Model:** We coordinate care directly over phone and WhatsApp so you can speak immediately with a real healthcare coordinator without waiting for automated bots or web forms.",
         actions: [
           { label: 'Call ' + AROVIA_PHONE_DISPLAY, url: AROVIA_PHONE_URI, isCall: true },
           { label: 'WhatsApp Arovia', url: AROVIA_WHATSAPP_URI, isWhatsApp: true },
@@ -541,9 +541,9 @@
       conversationState.lastService = 'home-care';
       return {
         text: "Arovia provides two distinct categories of home care tailored to different patient needs:\n\n" +
-              "• **Caregivers (Non-Clinical Daily Living Assistance):** Dedicated attendants who provide non-clinical everyday living support, including personal hygiene, bathing and dressing assistance, meal support and feeding assistance, mobility assistance, companionship, and medication reminders without prescribing or changing medicines.\n\n" +
-              "• **Registered Nurses (Professional Clinical Nursing Services):** Appropriately qualified clinical personnel who provide skilled nursing care at home, including injections, IV therapy, sterile wound care and dressings, catheter management, and vital signs monitoring when clinically appropriate.\n\n" +
-              "In summary, caregivers handle everyday personal care and daily living assistance, while registered nurses carry out clinical nursing procedures.",
+          "• **Caregivers (Non-Clinical Daily Living Assistance):** Dedicated attendants who provide non-clinical everyday living support, including personal hygiene, bathing and dressing assistance, meal support and feeding assistance, mobility assistance, companionship, and medication reminders without prescribing or changing medicines.\n\n" +
+          "• **Registered Nurses (Professional Clinical Nursing Services):** Appropriately qualified clinical personnel who provide skilled nursing care at home, including injections, IV therapy, sterile wound care and dressings, catheter management, and vital signs monitoring when clinically appropriate.\n\n" +
+          "In summary, caregivers handle everyday personal care and daily living assistance, while registered nurses carry out clinical nursing procedures.",
         actions: [
           { label: 'Explore Home Care', url: 'home-care.html' },
           { label: 'Call for Guidance', url: AROVIA_PHONE_URI, isCall: true },
@@ -577,8 +577,8 @@
       conversationState.lastService = 'lab-tests';
       return {
         text: "Arovia coordinates diagnostic laboratory investigations with **trained, qualified professionals visiting your home for sample collection** under sterile protocols.\n\n" +
-              "• **Investigations:** CBC, Fasting Sugar, HbA1c, Lipid Profile, Thyroid, LFT, KFT, and Comprehensive Health Packages.\n" +
-              "• **How to schedule:** Call our diagnostic desk with your doctor's requisition slip and fasting status. Charges are quoted transparently before testing.",
+          "• **Investigations:** CBC, Fasting Sugar, HbA1c, Lipid Profile, Thyroid, LFT, KFT, and Comprehensive Health Packages.\n" +
+          "• **How to schedule:** Call our diagnostic desk with your doctor's requisition slip and fasting status. Charges are quoted transparently before testing.",
         actions: [
           { label: 'Lab Tests & Packages', url: 'lab-tests.html' },
           { label: 'Call Diagnostic Desk', url: AROVIA_PHONE_URI, isCall: true },
@@ -604,9 +604,9 @@
       conversationState.lastService = 'home-care';
       return {
         text: "Arovia provides compassionate in-home care in two distinct categories:\n\n" +
-              "1. **Caregivers (Daily Living Support):** Attendants who assist with bathing, dressing, meal support, mobility assistance, safe daily routines, and friendly companionship.\n" +
-              "2. **Registered Nurses (Clinical Nursing):** Qualified clinical nurses who administer physician-prescribed injections, IV infusions, sterile wound dressings, catheter management, and vital signs monitoring.\n\n" +
-              "Call our coordination desk directly to discuss your loved one's specific care needs and shift timings.",
+          "1. **Caregivers (Daily Living Support):** Attendants who assist with bathing, dressing, meal support, mobility assistance, safe daily routines, and friendly companionship.\n" +
+          "2. **Registered Nurses (Clinical Nursing):** Qualified clinical nurses who administer physician-prescribed injections, IV infusions, sterile wound dressings, catheter management, and vital signs monitoring.\n\n" +
+          "Call our coordination desk directly to discuss your loved one's specific care needs and shift timings.",
         actions: [
           { label: 'Explore Home Care', url: 'home-care.html' },
           { label: 'Call Care Desk', url: AROVIA_PHONE_URI, isCall: true },
@@ -629,8 +629,8 @@
       conversationState.lastService = 'medical-equipment';
       return {
         text: "Arovia coordinates a catalog of **28 hospital-grade equipment items** spanning electric ICU beds, hydraulic recovery stretchers, ward furniture, and wheelchairs.\n\n" +
-              "• **International Export Only:** All equipment is supplied exclusively for international institutional and healthcare export.\n" +
-              "• **Proforma Invoices:** Call our equipment desk to request formal pricing and international shipping schedules.",
+          "• **International Export Only:** All equipment is supplied exclusively for international institutional and healthcare export.\n" +
+          "• **Proforma Invoices:** Call our equipment desk to request formal pricing and international shipping schedules.",
         actions: [
           { label: 'View Equipment Catalog', url: 'medical-equipment.html' },
           { label: 'Call Equipment Desk', url: AROVIA_PHONE_URI, isCall: true },
@@ -651,8 +651,8 @@
       conversationState.lastService = 'pharmacy';
       return {
         text: "Arovia coordinates pharmaceutical dispensation for acute treatments, post-surgical recovery, and chronic disease maintenance.\n\n" +
-              "• All prescription medicines require a valid doctor's prescription.\n" +
-              "• To enquire about medicine availability and pricing, call our pharmacy desk directly.",
+          "• All prescription medicines require a valid doctor's prescription.\n" +
+          "• To enquire about medicine availability and pricing, call our pharmacy desk directly.",
         actions: [
           { label: 'Explore Pharmacy Page', url: 'pharmacy.html' },
           { label: 'Call Pharmacy Desk', url: AROVIA_PHONE_URI, isCall: true },
@@ -673,8 +673,8 @@
       conversationState.lastService = 'ambulance';
       return {
         text: "Arovia coordinates safe, assisted patient transportation for scheduled hospital admissions, post-treatment discharges, diagnostic appointments, and inter-facility transfers in Guntur.\n\n" +
-              "• **Emergency Note:** For acute life-threatening emergencies, immediately dial **108** or **112** in India.\n" +
-              "• For planned assisted transit, dial our transportation desk to verify vehicle availability.",
+          "• **Emergency Note:** For acute life-threatening emergencies, immediately dial **108** or **112** in India.\n" +
+          "• For planned assisted transit, dial our transportation desk to verify vehicle availability.",
         actions: [
           { label: 'Explore Ambulance', url: 'ambulance.html' },
           { label: 'Call Transportation Desk', url: AROVIA_PHONE_URI, isCall: true },
@@ -741,27 +741,27 @@
         body: JSON.stringify({ message: query, context: conversationState.lastService }),
         signal: controller ? controller.signal : undefined
       })
-      .then(function (res) {
-        clearTimeout(timeoutId);
-        if (!res.ok) throw new Error('AI endpoint returned error');
-        return res.json();
-      })
-      .then(function (data) {
-        if (data && data.reply) {
-          callback({
-            text: data.reply,
-            actions: data.actions || [
-              { label: 'Call Arovia', url: AROVIA_PHONE_URI, isCall: true }
-            ]
-          });
-        } else {
+        .then(function (res) {
+          clearTimeout(timeoutId);
+          if (!res.ok) throw new Error('AI endpoint returned error');
+          return res.json();
+        })
+        .then(function (data) {
+          if (data && data.reply) {
+            callback({
+              text: data.reply,
+              actions: data.actions || [
+                { label: 'Call Arovia', url: AROVIA_PHONE_URI, isCall: true }
+              ]
+            });
+          } else {
+            callback(generateAroviaResponse(query));
+          }
+        })
+        .catch(function () {
+          clearTimeout(timeoutId);
           callback(generateAroviaResponse(query));
-        }
-      })
-      .catch(function () {
-        clearTimeout(timeoutId);
-        callback(generateAroviaResponse(query));
-      });
+        });
       return;
     }
 
@@ -858,7 +858,7 @@
       waButton.setAttribute('title', 'Chat with Arovia on WhatsApp');
       waButton.innerHTML =
         '<svg viewBox="0 0 24 24" class="arovia-whatsapp-icon" aria-hidden="true">' +
-          '<path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2zm.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.24 8.24-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.196 8.196 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24zm4.52 11.66c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.02-1.24-.75-.67-1.25-1.49-1.4-1.74-.14-.25-.02-.39.11-.51.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.44-.06-.13-.56-1.35-.77-1.85-.2-.49-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.45 1.03 2.61.13.17 1.78 2.71 4.3 3.8.6.26 1.07.41 1.43.53.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.06-.11-.23-.17-.48-.29z"/>' +
+        '<path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2zm.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.24 8.24-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.196 8.196 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24zm4.52 11.66c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.02-1.24-.75-.67-1.25-1.49-1.4-1.74-.14-.25-.02-.39.11-.51.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.44-.06-.13-.56-1.35-.77-1.85-.2-.49-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.45 1.03 2.61.13.17 1.78 2.71 4.3 3.8.6.26 1.07.41 1.43.53.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.06-.11-.23-.17-.48-.29z"/>' +
         '</svg>';
       document.body.appendChild(waButton);
     }
@@ -875,11 +875,11 @@
     launcher.setAttribute('title', 'Chat with AVI');
     launcher.innerHTML =
       '<div class="arovia-avi-avatar-wrap">' +
-        '<img src="assets/avi-assistant.png" alt="AVI - Arovia\'s Virtual Assistant" class="arovia-avi-avatar-img">' +
-        '<span class="arovia-avi-status-dot" aria-label="Online"></span>' +
+      '<img src="assets/avi-assistant.png" alt="AVI - Arovia\'s Virtual Assistant" class="arovia-avi-avatar-img">' +
+      '<span class="arovia-avi-status-dot" aria-label="Online"></span>' +
       '</div>' +
       '<div class="arovia-avi-close-icon">' +
-        '<svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>' +
+      '<svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>' +
       '</div>';
 
     // 1b. Welcome Greeting Bubble near AVI
@@ -956,40 +956,40 @@
     chatWindow.setAttribute('aria-hidden', 'true');
     chatWindow.innerHTML =
       '<div class="arovia-chat-header">' +
-        '<div class="arovia-chat-header__brand">' +
-          '<div class="arovia-chat-header__avatar">' +
-            '<img src="assets/avi-assistant.png" alt="AVI" width="38" height="38">' +
-            '<span class="arovia-chat-header__status-dot" aria-label="Online"></span>' +
-          '</div>' +
-          '<div class="arovia-chat-header__info">' +
-            '<div class="arovia-chat-header__title-row">' +
-              '<h3 class="arovia-chat-header__title">AVI</h3>' +
-            '</div>' +
-            '<p class="arovia-chat-header__subtitle">Your Arovia Assistant</p>' +
-          '</div>' +
-        '</div>' +
-        '<div class="arovia-chat-header__actions">' +
-          '<button type="button" id="aroviaChatReset" class="arovia-chat-header__btn" title="Start New Conversation" aria-label="Start new conversation">' +
-            '<svg viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>' +
-          '</button>' +
-          '<button type="button" id="aroviaChatClose" class="arovia-chat-header__btn" title="Close Chat" aria-label="Close chat window">' +
-            '<svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>' +
-          '</button>' +
-        '</div>' +
+      '<div class="arovia-chat-header__brand">' +
+      '<div class="arovia-chat-header__avatar">' +
+      '<img src="assets/avi-assistant.png" alt="AVI" width="38" height="38">' +
+      '<span class="arovia-chat-header__status-dot" aria-label="Online"></span>' +
+      '</div>' +
+      '<div class="arovia-chat-header__info">' +
+      '<div class="arovia-chat-header__title-row">' +
+      '<h3 class="arovia-chat-header__title">AVI</h3>' +
+      '</div>' +
+      '<p class="arovia-chat-header__subtitle">Your Arovia Assistant</p>' +
+      '</div>' +
+      '</div>' +
+      '<div class="arovia-chat-header__actions">' +
+      '<button type="button" id="aroviaChatReset" class="arovia-chat-header__btn" title="Start New Conversation" aria-label="Start new conversation">' +
+      '<svg viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>' +
+      '</button>' +
+      '<button type="button" id="aroviaChatClose" class="arovia-chat-header__btn" title="Close Chat" aria-label="Close chat window">' +
+      '<svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>' +
+      '</button>' +
+      '</div>' +
       '</div>' +
       '<div class="arovia-chat-phone-banner">' +
-        '<span>Direct Phone Coordination</span>' +
-        '<a href="' + AROVIA_PHONE_URI + '" aria-label="Call Arovia directly at ' + AROVIA_PHONE_DISPLAY + '">📞 ' + AROVIA_PHONE_DISPLAY + '</a>' +
+      '<span>Direct Phone Coordination</span>' +
+      '<a href="' + AROVIA_PHONE_URI + '" aria-label="Call Arovia directly at ' + AROVIA_PHONE_DISPLAY + '">📞 ' + AROVIA_PHONE_DISPLAY + '</a>' +
       '</div>' +
       '<div id="aroviaChatMessages" class="arovia-chat-messages" role="log" aria-live="polite"></div>' +
       '<div class="arovia-chat-input-area">' +
-        '<form id="aroviaChatForm" class="arovia-chat-form">' +
-          '<textarea id="aroviaChatInput" class="arovia-chat-input" placeholder="Type your healthcare question here..." rows="1" aria-label="Type your message"></textarea>' +
-          '<button type="submit" id="aroviaChatSend" class="arovia-chat-send-btn" aria-label="Send message">' +
-            '<svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>' +
-          '</button>' +
-        '</form>' +
-        '<div class="arovia-chat-footer-note">Direct telephone coordination desk • ' + AROVIA_LOCATION + '</div>' +
+      '<form id="aroviaChatForm" class="arovia-chat-form">' +
+      '<textarea id="aroviaChatInput" class="arovia-chat-input" placeholder="Type your healthcare question here..." rows="1" aria-label="Type your message"></textarea>' +
+      '<button type="submit" id="aroviaChatSend" class="arovia-chat-send-btn" aria-label="Send message">' +
+      '<svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>' +
+      '</button>' +
+      '</form>' +
+      '<div class="arovia-chat-footer-note">Direct telephone coordination desk • ' + AROVIA_LOCATION + '</div>' +
       '</div>';
 
     document.body.appendChild(launcher);
@@ -1022,7 +1022,7 @@
     greetingMsg1.className = 'arovia-chat-msg arovia-chat-msg--bot';
     greetingMsg1.innerHTML =
       '<div class="arovia-chat-msg__bubble">' +
-        '<p>Hi! I\'m AVI, your AI assistant. 👋</p>' +
+      '<p>Hi! I\'m AVI, your AI assistant. 👋</p>' +
       '</div>';
     messagesContainer.appendChild(greetingMsg1);
 
@@ -1031,7 +1031,7 @@
     greetingMsg2.className = 'arovia-chat-msg arovia-chat-msg--bot arovia-chat-msg--greeting-second';
     greetingMsg2.innerHTML =
       '<div class="arovia-chat-msg__bubble">' +
-        '<p>How can I help you today?</p>' +
+      '<p>How can I help you today?</p>' +
       '</div>' +
       '<div class="arovia-chat-msg__time">' + getCurrentTime() + '</div>';
     messagesContainer.appendChild(greetingMsg2);
@@ -1073,7 +1073,7 @@
   function restoreOrInitConversation(launcher, chatWindow, bubble) {
     var saved = getSavedSessionState();
     var messagesContainer = document.getElementById('aroviaChatMessages');
-    var waButton = document.getElementById('aroviaWhatsappFloat');
+    var waButton = document.getElementById('aroviaWhatsAppFloat');
 
     if (saved && saved.history && saved.history.length > 0) {
       if (messagesContainer) messagesContainer.innerHTML = '';
@@ -1094,7 +1094,16 @@
           launcher.setAttribute('aria-expanded', 'true');
         }
         if (bubble) bubble.classList.add('is-dismissed');
-        if (waButton) waButton.classList.add('is-chat-open');
+        if (waButton) {
+          waButton.classList.add('is-chat-open');
+          setTimeout(function () {
+            var chatStyle = window.getComputedStyle(chatWindow);
+            var chatBottom = parseFloat(chatStyle.bottom) || 16;
+            var chatHeight = chatWindow.offsetHeight;
+            var targetBottom = Math.min(chatBottom + chatHeight + 10, window.innerHeight - 54);
+            waButton.style.bottom = targetBottom + 'px';
+          }, 50);
+        }
       }
     } else {
       renderWelcomeState();
@@ -1125,8 +1134,8 @@
           bubbleHtml += '<button type="button" class="arovia-chat-action-btn arovia-chat-action-btn--restart" data-action="restart">🔄 ' + act.label + '</button>';
         } else {
           var btnClass = act.isCall ? 'arovia-chat-action-btn arovia-chat-action-btn--call' :
-                         act.isWhatsApp ? 'arovia-chat-action-btn arovia-chat-action-btn--whatsapp' :
-                         'arovia-chat-action-btn';
+            act.isWhatsApp ? 'arovia-chat-action-btn arovia-chat-action-btn--whatsapp' :
+              'arovia-chat-action-btn';
           var isMail = act.url && act.url.startsWith('mailto:');
           var icon = act.isCall ? '📞 ' : act.isWhatsApp ? '💬 ' : isMail ? '✉️ ' : '🔗 ';
           var targetAttr = (act.isCall || isMail) ? '' : (act.isWhatsApp ? 'target="_blank" rel="noopener noreferrer"' : 'target="_self"');
@@ -1303,6 +1312,31 @@
       });
     }
 
+    function updateWhatsAppPosition() {
+      var waBtn = document.getElementById('aroviaWhatsAppFloat');
+      if (!waBtn || !chatWindow) return;
+
+      if (conversationState.isOpen && chatWindow.classList.contains('is-open')) {
+        var chatStyle = window.getComputedStyle(chatWindow);
+        var chatBottom = parseFloat(chatStyle.bottom) || 16;
+        var chatHeight = chatWindow.offsetHeight;
+        var gap = 10;
+        var targetBottom = chatBottom + chatHeight + gap;
+
+        var waHeight = waBtn.offsetHeight || 46;
+        var maxBottom = window.innerHeight - waHeight - 8;
+        if (targetBottom > maxBottom) {
+          targetBottom = maxBottom;
+        }
+
+        waBtn.style.bottom = targetBottom + 'px';
+      } else {
+        waBtn.style.bottom = '';
+      }
+    }
+
+    window.addEventListener('resize', updateWhatsAppPosition);
+
     function toggleChat() {
       if (conversationState.isOpen) {
         closeChat();
@@ -1317,6 +1351,7 @@
       launcher.classList.add('is-active');
       if (waButton) waButton.classList.add('is-chat-open');
       document.body.classList.add('arovia-chat-open');
+      updateWhatsAppPosition();
       dismissBubble();
       launcher.setAttribute('aria-expanded', 'true');
       chatWindow.setAttribute('aria-hidden', 'false');
@@ -1333,6 +1368,7 @@
       launcher.classList.remove('is-active');
       if (waButton) waButton.classList.remove('is-chat-open');
       document.body.classList.remove('arovia-chat-open');
+      updateWhatsAppPosition();
       launcher.setAttribute('aria-expanded', 'false');
       chatWindow.setAttribute('aria-hidden', 'true');
       saveSessionState();
