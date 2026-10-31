@@ -316,18 +316,30 @@ body.arovia-chat-open .arovia-chat-launcher {
 }
 
 /* --- Chat Window Container (Sleek, Compact, Downwards Position) --- */
+.arovia-chat-window,
+.arovia-chat-window button,
+.arovia-chat-window input,
+.arovia-chat-window textarea,
+.arovia-chat-window h3,
+.arovia-chat-window p,
+.arovia-chat-window span,
+.arovia-chat-window a,
+.arovia-chat-window li {
+  font-family: var(--font-family-sans, 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif) !important;
+}
+
 .arovia-chat-window {
   position: fixed;
   bottom: 16px;
   right: 16px;
-  width: 290px;
+  width: 330px;
   max-width: calc(100vw - 32px);
-  height: 360px;
+  height: 460px;
   max-height: calc(100vh - 80px);
   background-color: var(--chat-white);
   border-radius: 14px;
   box-shadow: 0 16px 40px -8px rgba(10, 45, 51, 0.28), 0 6px 16px -2px rgba(10, 45, 51, 0.12);
-  border: 1px solid rgba(0, 86, 98, 0.18);
+  border: 1px solid rgba(0, 86, 98, 0.2);
   display: flex;
   flex-direction: column;
   z-index: 10000;
@@ -349,7 +361,7 @@ body.arovia-chat-open .arovia-chat-launcher {
 .arovia-chat-header {
   background: linear-gradient(135deg, var(--chat-primary-dark) 0%, var(--chat-primary) 100%);
   color: var(--chat-white);
-  padding: 8px 12px;
+  padding: 9px 12px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -395,11 +407,12 @@ body.arovia-chat-open .arovia-chat-launcher {
 }
 
 .arovia-chat-header__title {
-  font-size: 0.825rem;
-  font-weight: 700;
-  color: var(--chat-white);
+  font-size: 0.9rem !important;
+  font-weight: 700 !important;
+  color: var(--chat-white) !important;
   margin: 0;
   line-height: 1.2;
+  letter-spacing: -0.01em;
 }
 
 .arovia-chat-header__status-dot {
@@ -411,10 +424,11 @@ body.arovia-chat-open .arovia-chat-launcher {
 }
 
 .arovia-chat-header__subtitle {
-  font-size: 0.625rem;
-  color: var(--chat-teal-light);
+  font-size: 0.6875rem !important;
+  color: var(--chat-teal-light) !important;
   margin: 1px 0 0;
   line-height: 1.15;
+  font-weight: 400 !important;
 }
 
 .arovia-chat-header__actions {
@@ -452,20 +466,22 @@ body.arovia-chat-open .arovia-chat-launcher {
 
 /* --- Phone Notice Banner --- */
 .arovia-chat-phone-banner {
-  background-color: var(--chat-primary-light);
-  border-bottom: 1px solid var(--chat-border);
-  padding: 3px 10px;
+  background-color: #e6f4f5;
+  border-bottom: 1px solid #d0e4e6;
+  padding: 5px 12px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 0.68rem;
-  color: var(--chat-primary-dark);
+  font-size: 0.72rem !important;
+  color: #0a2d33 !important;
+  font-weight: 600;
   flex-shrink: 0;
 }
 
 .arovia-chat-phone-banner a {
-  color: var(--chat-primary);
-  font-weight: 700;
+  color: #005662 !important;
+  font-weight: 700 !important;
+  font-size: 0.75rem !important;
   display: inline-flex;
   align-items: center;
   gap: 3px;
@@ -473,17 +489,17 @@ body.arovia-chat-open .arovia-chat-launcher {
 }
 
 .arovia-chat-phone-banner a:hover {
-  color: var(--chat-primary-hover);
+  color: #00363d !important;
 }
 
 /* --- Messages Container --- */
 .arovia-chat-messages {
   flex: 1 1 auto;
   overflow-y: auto;
-  padding: 10px;
+  padding: 11px 12px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
   background-color: var(--chat-bg);
   scroll-behavior: smooth;
   scrollbar-width: thin;
@@ -511,7 +527,7 @@ body.arovia-chat-open .arovia-chat-launcher {
 .arovia-chat-msg {
   display: flex;
   flex-direction: column;
-  max-width: 88%;
+  max-width: 86%;
   animation: aroviaFadeIn 0.25s ease-out;
 }
 
@@ -529,67 +545,118 @@ body.arovia-chat-open .arovia-chat-launcher {
 }
 
 .arovia-chat-msg__bubble {
-  padding: 7px 11px;
+  padding: 8px 12px;
   border-radius: 12px;
-  font-size: 0.785rem;
-  line-height: 1.42;
+  font-size: 0.8125rem !important;
+  line-height: 1.42 !important;
   word-break: break-word;
 }
 
+/* AI Assistant Bot Bubble: high-contrast dark text on clean white surface */
 .arovia-chat-msg--bot .arovia-chat-msg__bubble {
-  background-color: var(--chat-white);
-  color: var(--chat-text);
-  border: 1px solid var(--chat-border);
+  background-color: #ffffff;
+  color: #091e24 !important;
+  border: 1px solid #d0dfe3;
   border-top-left-radius: 4px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 1px 3px rgba(10, 45, 51, 0.05);
 }
 
-.arovia-chat-msg--user .arovia-chat-msg__bubble {
-  background: var(--chat-primary);
-  color: var(--chat-white);
-  border-top-right-radius: 4px;
+.arovia-chat-msg--bot .arovia-chat-msg__bubble,
+.arovia-chat-msg--bot .arovia-chat-msg__bubble p,
+.arovia-chat-msg--bot .arovia-chat-msg__bubble span,
+.arovia-chat-msg--bot .arovia-chat-msg__bubble li {
+  color: #091e24 !important;
+  font-size: 0.8125rem !important;
+  line-height: 1.45 !important;
 }
 
-.arovia-chat-msg__bubble p {
-  margin: 0 0 5px 0;
+.arovia-chat-msg--bot .arovia-chat-msg__bubble strong {
+  color: #00363d !important;
+  font-weight: 700;
 }
 
-.arovia-chat-msg__bubble p:last-child {
-  margin-bottom: 0;
-}
-
-.arovia-chat-msg__bubble ul {
-  margin: 6px 0 6px 16px;
-  padding: 0;
-  list-style: disc;
-}
-
-.arovia-chat-msg__bubble li {
-  margin-bottom: 4px;
-}
-
-.arovia-chat-msg__bubble a {
-  color: var(--chat-primary);
+/* Links inside prose ONLY - do NOT target action buttons */
+.arovia-chat-msg--bot .arovia-chat-msg__bubble a:not(.arovia-chat-action-btn) {
+  color: #005662 !important;
   font-weight: 600;
   text-decoration: underline;
 }
 
+.arovia-chat-msg--bot .arovia-chat-msg__bubble a:not(.arovia-chat-action-btn):hover {
+  color: #008794 !important;
+}
+
+/* User Message Bubble: crisp white text with strong specificity to override global paragraph styles */
+.arovia-chat-msg--user .arovia-chat-msg__bubble {
+  background: var(--chat-primary, #005662);
+  color: #ffffff !important;
+  border-top-right-radius: 4px;
+  box-shadow: 0 1px 4px rgba(0, 86, 98, 0.22);
+}
+
+.arovia-chat-msg--user .arovia-chat-msg__bubble,
+.arovia-chat-msg--user .arovia-chat-msg__bubble p,
+.arovia-chat-msg--user .arovia-chat-msg__bubble span,
+.arovia-chat-msg--user .arovia-chat-msg__bubble strong,
+.arovia-chat-msg--user .arovia-chat-msg__bubble em {
+  color: #ffffff !important;
+  font-size: 0.8125rem !important;
+  line-height: 1.42 !important;
+  font-weight: 500;
+}
+
 .arovia-chat-msg--user .arovia-chat-msg__bubble a {
-  color: var(--chat-white);
+  color: #e6f4f5 !important;
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+.arovia-chat-msg--user .arovia-chat-msg__bubble a:hover {
+  color: #ffffff !important;
+}
+
+.arovia-chat-msg__bubble p {
+  margin: 0 0 5px 0 !important;
+  line-height: 1.42 !important;
+}
+
+.arovia-chat-msg__bubble p:last-child {
+  margin-bottom: 0 !important;
+}
+
+.arovia-chat-msg__bubble ul {
+  margin: 5px 0 5px 16px !important;
+  padding: 0 !important;
+  list-style: disc;
+}
+
+.arovia-chat-msg__bubble ol {
+  margin: 5px 0 5px 16px !important;
+  padding: 0 !important;
+}
+
+.arovia-chat-msg__bubble li {
+  margin-bottom: 3px !important;
+  line-height: 1.4 !important;
+}
+
+.arovia-chat-msg__bubble li:last-child {
+  margin-bottom: 0 !important;
 }
 
 .arovia-chat-msg__time {
-  font-size: 0.6875rem;
-  color: var(--chat-text-muted);
-  margin-top: 3px;
+  font-size: 0.65rem !important;
+  color: #475569 !important;
+  margin-top: 2px;
   padding: 0 4px;
+  line-height: 1.2;
 }
 
 .arovia-chat-msg--user .arovia-chat-msg__time {
   text-align: right;
 }
 
-/* Action Buttons attached to Bot Messages */
+/* Action Buttons attached to Bot Messages - High Specificity */
 .arovia-chat-msg__actions {
   display: flex;
   flex-wrap: wrap;
@@ -597,67 +664,104 @@ body.arovia-chat-open .arovia-chat-launcher {
   margin-top: 8px;
 }
 
+.arovia-chat-window .arovia-chat-action-btn,
+.arovia-chat-msg__bubble .arovia-chat-action-btn,
 .arovia-chat-action-btn {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 5px 10px;
+  padding: 6px 12px;
   border-radius: 6px;
-  font-size: 0.75rem;
-  font-weight: 600;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
   text-decoration: none !important;
   transition: all 0.15s ease;
-  border: 1px solid var(--chat-primary);
-  background: var(--chat-white);
-  color: var(--chat-primary) !important;
+  border: 1.5px solid #005662 !important;
+  background-color: #ffffff !important;
+  color: #005662 !important;
+  line-height: 1.25;
 }
 
+.arovia-chat-window .arovia-chat-action-btn:hover,
+.arovia-chat-msg__bubble .arovia-chat-action-btn:hover,
 .arovia-chat-action-btn:hover {
-  background: var(--chat-primary);
-  color: var(--chat-white) !important;
+  background-color: #005662 !important;
+  color: #ffffff !important;
+  text-decoration: none !important;
 }
 
+.arovia-chat-window .arovia-chat-action-btn--call,
+.arovia-chat-msg__bubble .arovia-chat-action-btn--call,
 .arovia-chat-action-btn--call {
-  background: var(--chat-primary);
-  color: var(--chat-white) !important;
-  border-color: var(--chat-primary);
+  background-color: #005662 !important;
+  color: #ffffff !important;
+  border-color: #005662 !important;
+  text-decoration: none !important;
 }
 
+.arovia-chat-window .arovia-chat-action-btn--call:hover,
+.arovia-chat-msg__bubble .arovia-chat-action-btn--call:hover,
 .arovia-chat-action-btn--call:hover {
-  background: var(--chat-primary-hover);
+  background-color: #003e47 !important;
+  border-color: #003e47 !important;
+  color: #ffffff !important;
 }
 
+.arovia-chat-window .arovia-chat-action-btn--whatsapp,
+.arovia-chat-msg__bubble .arovia-chat-action-btn--whatsapp,
 .arovia-chat-action-btn--whatsapp {
-  background: #25D366;
-  color: var(--chat-white) !important;
-  border-color: #25D366;
+  background-color: #15803d !important;
+  color: #ffffff !important;
+  border-color: #15803d !important;
+  text-decoration: none !important;
 }
 
+.arovia-chat-window .arovia-chat-action-btn--whatsapp:hover,
+.arovia-chat-msg__bubble .arovia-chat-action-btn--whatsapp:hover,
 .arovia-chat-action-btn--whatsapp:hover {
-  background: #20ba5a;
-  border-color: #20ba5a;
+  background-color: #166534 !important;
+  border-color: #166534 !important;
+  color: #ffffff !important;
+}
+
+.arovia-chat-window .arovia-chat-action-btn--restart,
+.arovia-chat-msg__bubble .arovia-chat-action-btn--restart,
+.arovia-chat-action-btn--restart {
+  background-color: #e6f4f5 !important;
+  color: #005662 !important;
+  border: 1.5px dashed #005662 !important;
+  cursor: pointer;
+  text-decoration: none !important;
+}
+
+.arovia-chat-window .arovia-chat-action-btn--restart:hover,
+.arovia-chat-msg__bubble .arovia-chat-action-btn--restart:hover,
+.arovia-chat-action-btn--restart:hover {
+  background-color: #005662 !important;
+  color: #ffffff !important;
+  border-style: solid !important;
 }
 
 /* --- Suggested Questions Area --- */
 .arovia-chat-suggestions {
-  margin-top: 2px;
+  margin-top: 4px;
   display: flex;
   flex-direction: column;
   gap: 5px;
 }
 
 .arovia-chat-suggestions--default {
-  margin-top: 0;
-  padding: 2px 0 6px 0;
+  margin-top: 2px;
+  padding: 0;
 }
 
 .arovia-chat-suggestions__header {
   font-size: 0.68rem;
   font-weight: 800;
   letter-spacing: 0.6px;
-  color: var(--chat-primary-dark);
+  color: #0a2d33;
   text-transform: uppercase;
-  margin-bottom: 4px;
+  margin-bottom: 3px;
   display: flex;
   align-items: center;
   gap: 5px;
@@ -668,7 +772,7 @@ body.arovia-chat-open .arovia-chat-launcher {
   display: inline-block;
   width: 3px;
   height: 10px;
-  background-color: var(--chat-accent);
+  background-color: var(--chat-accent, #008794);
   border-radius: 2px;
 }
 
@@ -677,56 +781,58 @@ body.arovia-chat-open .arovia-chat-launcher {
   text-transform: uppercase;
   letter-spacing: 0.5px;
   font-weight: 700;
-  color: var(--chat-text-muted);
+  color: #52666d;
   margin-bottom: 2px;
 }
 
 .arovia-chat-suggestions__list {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 6px;
 }
 
 .arovia-chat-chip {
-  background: var(--chat-white);
-  border: 1px solid var(--chat-border);
-  color: var(--chat-primary-dark);
-  font-size: 0.735rem;
-  font-weight: 500;
-  padding: 6px 9px;
-  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  color: #072327 !important;
+  font-size: 0.8125rem !important;
+  font-weight: 600 !important;
+  padding: 8px 12px;
+  border-radius: 9px;
   cursor: pointer;
   text-align: left;
   transition: all 0.15s ease;
-  line-height: 1.3;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  line-height: 1.34;
+  box-shadow: 0 1px 3px rgba(10, 45, 51, 0.05);
+  outline: none !important;
+  box-sizing: border-box;
 }
 
 .arovia-chat-chip:hover {
-  background: var(--chat-primary-light);
-  border-color: var(--chat-primary);
-  color: var(--chat-primary);
+  background: #eef7f8;
+  border-color: #005662;
+  color: #003e47 !important;
   transform: translateX(2px);
-  box-shadow: 0 2px 4px rgba(0, 86, 98, 0.08);
+  box-shadow: 0 2px 6px rgba(0, 86, 98, 0.14);
 }
 
-.arovia-chat-chip-more {
-  background: transparent;
-  border: 1px dashed var(--chat-border);
-  color: var(--chat-primary);
-  font-size: 0.7rem;
-  font-weight: 600;
-  padding: 5px 9px;
-  border-radius: 7px;
-  cursor: pointer;
-  text-align: center;
-  transition: all 0.15s ease;
-  margin-top: 2px;
+.arovia-chat-chip:focus-visible {
+  outline: 2px solid #005662 !important;
+  outline-offset: 1px;
+  background: #eef7f8;
+  border-color: #005662;
+  color: #003e47 !important;
 }
 
-.arovia-chat-chip-more:hover {
-  background: var(--chat-primary-light);
-  border-color: var(--chat-primary);
+.arovia-chat-chip:active {
+  background: #005662;
+  border-color: #005662;
+  color: #ffffff !important;
+  transform: scale(0.99);
 }
 
 /* --- Typing Indicator --- */
@@ -764,9 +870,9 @@ body.arovia-chat-open .arovia-chat-launcher {
 
 /* --- Chat Input Area --- */
 .arovia-chat-input-area {
-  padding: 7px 10px 6px 10px;
-  background-color: var(--chat-white);
-  border-top: 1px solid var(--chat-border);
+  padding: 7px 12px 6px 12px;
+  background-color: #ffffff;
+  border-top: 1px solid var(--chat-border, #dce5e8);
   flex-shrink: 0;
 }
 
@@ -778,35 +884,45 @@ body.arovia-chat-open .arovia-chat-launcher {
 
 .arovia-chat-input {
   flex: 1 1 auto;
-  border: 1px solid var(--chat-border);
-  border-radius: 16px;
-  padding: 6px 10px;
-  font-size: 0.775rem;
+  border: 1.5px solid #94a3b8;
+  border-radius: 18px;
+  padding: 6px 12px;
+  font-size: 0.8125rem !important;
   font-family: inherit;
-  color: var(--chat-text);
-  background-color: var(--chat-bg);
-  outline: none;
-  transition: border-color 0.15s ease, background-color 0.15s ease;
+  color: #091e24 !important;
+  background-color: #ffffff;
+  outline: none !important;
+  transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
   resize: none !important;
   line-height: 1.35;
   max-height: 52px;
-  min-height: 30px;
+  min-height: 34px;
   box-sizing: border-box;
   overflow-y: hidden;
 }
 
-.arovia-chat-input:focus {
-  border-color: var(--chat-primary);
-  background-color: var(--chat-white);
-  box-shadow: 0 0 0 2px rgba(0, 86, 98, 0.15);
+.arovia-chat-input:focus,
+.arovia-chat-input:focus-visible {
+  outline: none !important;
+  border-color: #005662 !important;
+  background-color: #ffffff;
+  color: #091e24 !important;
+  box-shadow: 0 0 0 2px rgba(0, 86, 98, 0.2) !important;
+}
+
+.arovia-chat-input::placeholder {
+  color: #475569 !important;
+  opacity: 1;
+  font-size: 0.78rem !important;
+  font-weight: 400;
 }
 
 .arovia-chat-send-btn {
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background: var(--chat-primary);
-  color: var(--chat-white);
+  background: var(--chat-primary, #005662);
+  color: #ffffff;
   border: none;
   cursor: pointer;
   display: flex;
@@ -818,7 +934,7 @@ body.arovia-chat-open .arovia-chat-launcher {
 }
 
 .arovia-chat-send-btn:hover {
-  background: var(--chat-primary-hover);
+  background: var(--chat-primary-hover, #00434d);
   transform: scale(1.05);
 }
 
@@ -831,13 +947,13 @@ body.arovia-chat-open .arovia-chat-launcher {
 .arovia-chat-send-btn svg {
   width: 14px;
   height: 14px;
-  fill: currentColor;
+  fill: #ffffff;
 }
 
 /* Disclaimer / Footer strip */
 .arovia-chat-footer-note {
-  font-size: 0.6rem;
-  color: var(--chat-text-muted);
+  font-size: 0.62rem !important;
+  color: #475569 !important;
   text-align: center;
   margin-top: 4px;
   line-height: 1.2;

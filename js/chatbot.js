@@ -26,17 +26,15 @@
   var AROVIA_PHONE_DISPLAY = '+91 96496 48430';
   var AROVIA_PHONE_URI = 'tel:+919649648430';
   var AROVIA_WHATSAPP_URI = 'https://wa.me/919649648430?text=Hello%20Arovia%2C%20I%20would%20like%20to%20know%20more%20about%20your%20healthcare%20services.';
+  var AROVIA_EMAIL = 'arovia22@gmail.com';
   var AROVIA_LOCATION = 'Guntur, Andhra Pradesh';
+  var AROVIA_ADDRESS = 'Shop No.26, Ground Floor, Annapurna Complex, Kakani Road, Guntur - 522 001, AP, India';
 
-  // Default suggested questions (Prompt Section 7)
+  // Exactly four clickable questions (Dr. Lal PathLabs greeting-first conversation flow)
   var DEFAULT_SUGGESTIONS = [
-    'What services does Arovia provide?',
-    'How can I arrange home care?',
-    'Do you provide home lab sample collection?',
-    'What is the difference between caregivers and registered nurses?',
-    'How can I check lab test prices and packages?',
-    'What medical equipment is available?',
-    'How can I find medicines and their prices?',
+    'What healthcare services do you offer?',
+    'How can I book a home healthcare service?',
+    'What areas do you provide services in?',
     'How can I contact Arovia?'
   ];
 
@@ -47,6 +45,39 @@
     lastService: null,
     isTyping: false
   };
+
+  // Browser Tab Session Persistence Key
+  var SESSION_STORAGE_KEY = 'arovia_chat_session_v1';
+
+  function saveSessionState() {
+    try {
+      var stateToSave = {
+        isOpen: conversationState.isOpen,
+        history: conversationState.history,
+        lastService: conversationState.lastService
+      };
+      sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(stateToSave));
+    } catch (e) {}
+  }
+
+  function clearSessionState() {
+    try {
+      sessionStorage.removeItem(SESSION_STORAGE_KEY);
+    } catch (e) {}
+  }
+
+  function getSavedSessionState() {
+    try {
+      var saved = sessionStorage.getItem(SESSION_STORAGE_KEY);
+      if (saved) {
+        var parsed = JSON.parse(saved);
+        if (parsed && Array.isArray(parsed.history) && parsed.history.length > 0) {
+          return parsed;
+        }
+      }
+    } catch (e) {}
+    return null;
+  }
 
   /* ==========================================================================
      1. Natural Language Preprocessing, Typo Correction & Damerau-Levenshtein
@@ -337,11 +368,12 @@
       if (!greetingInfo.hasQuestion) {
         // Pure Greeting: e.g. "Hii", "Hello AVI", "Namaste", "Good morning"
         return {
-          text: "Hi! 👋 How can I assist you today?",
-          showSuggestions: true,
+          text: "Hi! 👋 How can I assist you today? Feel free to ask about our home care, ambulance services, medical equipment, pharmacy, or diagnostic lab tests.",
+          showSuggestions: false,
           actions: [
             { label: 'Explore Services', url: 'index.html#services' },
-            { label: 'Call Arovia Desk', url: AROVIA_PHONE_URI, isCall: true }
+            { label: 'Call Arovia Desk', url: AROVIA_PHONE_URI, isCall: true },
+            { label: 'Main Menu', isRestart: true }
           ]
         };
       } else {
@@ -380,7 +412,125 @@
    */
   function resolveAroviaIntent(normalized, rawQuery) {
 
-    // 4. Intent: Caregiver vs Registered Nurse Distinction
+    // 1. Question 3: What areas do you provide services in? (Coverage / Location inquiry)
+    var isLocationCoverageQuery = (
+      normalized.indexOf('what areas') !== -1 ||
+      normalized.indexOf('areas do you provide') !== -1 ||
+      normalized.indexOf('areas') !== -1 ||
+      normalized.indexOf('area') !== -1 ||
+      normalized.indexOf('coverage') !== -1 ||
+      normalized.indexOf('where do you provide') !== -1 ||
+      normalized.indexOf('which cities') !== -1 ||
+      normalized.indexOf('service in guntur') !== -1 ||
+      normalized.indexOf('locations') !== -1 ||
+      normalized.indexOf('location') !== -1 ||
+      normalized.indexOf('where are you') !== -1
+    );
+
+    if (isLocationCoverageQuery) {
+      return {
+        text: "Arovia coordinates healthcare services across verified coverage areas:\n\n" +
+              "• **Local Home Healthcare & Transit (Guntur):** Direct home care (caregivers and registered nurses), non-emergency ambulance patient transit, home lab sample collection, and prescription medicine delivery are actively provided throughout **Guntur, Andhra Pradesh** and immediately surrounding areas.\n\n" +
+              "• **Medical Equipment Export:** Hospital beds, ICU equipment, and patient mobility devices are supplied exclusively for **international healthcare export** to institutional buyers and overseas destinations.\n\n" +
+              "If you are outside these areas or wish to check if staff can be dispatched to your exact address, please contact our coordination desk.",
+        actions: [
+          { label: 'Call Helpline: ' + AROVIA_PHONE_DISPLAY, url: AROVIA_PHONE_URI, isCall: true },
+          { label: 'WhatsApp Inquiry', url: AROVIA_WHATSAPP_URI, isWhatsApp: true },
+          { label: 'View Contact Page', url: 'contact.html' },
+          { label: 'Main Menu', isRestart: true }
+        ]
+      };
+    }
+
+    // 2. Question 1: What healthcare services do you offer?
+    var isServicesOverview = (
+      normalized.indexOf('what healthcare services') !== -1 ||
+      normalized.indexOf('services do you offer') !== -1 ||
+      normalized.indexOf('services you offer') !== -1 ||
+      normalized.indexOf('what services') !== -1 ||
+      normalized.indexOf('services offer') !== -1 ||
+      normalized.indexOf('what do you offer') !== -1 ||
+      normalized.indexOf('all services') !== -1 ||
+      normalized.indexOf('available services') !== -1 ||
+      (normalized.indexOf('service') !== -1 && (normalized.indexOf('offer') !== -1 || normalized.indexOf('provide') !== -1 || normalized.indexOf('list') !== -1))
+    );
+
+    if (isServicesOverview) {
+      return {
+        text: "Arovia coordinates five essential healthcare services:\n\n" +
+              "1. **Home Care:** Dedicated personal attendants for daily living assistance (bathing, meals, mobility, companionship) and registered nurses for physician-prescribed clinical nursing (injections, IV therapy, sterile wound dressings, vitals monitoring).\n" +
+              "2. **Ambulance Services:** Assisted non-emergency transit for planned hospital admissions, diagnostic appointments, and inter-facility transfers.\n" +
+              "3. **Medical Equipment:** 28 hospital-grade equipment items (electric ICU beds, hydraulic recovery stretchers, wheelchairs) supplied for international export.\n" +
+              "4. **Pharmacy Services:** Prescription and chronic maintenance medicine coordination with required doctor prescription verification.\n" +
+              "5. **Diagnostic Lab Tests:** Comprehensive screening packages and individual blood tests with trained phlebotomists collecting samples at your home.\n\n" +
+              "Which service would you like to explore or arrange?",
+        actions: [
+          { label: 'Explore Services', url: 'index.html#services' },
+          { label: 'Call Helpline: ' + AROVIA_PHONE_DISPLAY, url: AROVIA_PHONE_URI, isCall: true },
+          { label: 'WhatsApp Us', url: AROVIA_WHATSAPP_URI, isWhatsApp: true },
+          { label: 'Main Menu', isRestart: true }
+        ]
+      };
+    }
+
+    // 3. Question 2: How can I book a home healthcare service?
+    var isBookHomeCare = (
+      (normalized.indexOf('book') !== -1 || normalized.indexOf('arrange') !== -1 || normalized.indexOf('how can i') !== -1 || normalized.indexOf('how do i') !== -1 || normalized.indexOf('process') !== -1 || normalized.indexOf('steps') !== -1) &&
+      (normalized.indexOf('home care') !== -1 || normalized.indexOf('home healthcare') !== -1 || normalized.indexOf('homecare') !== -1 || normalized.indexOf('nurse') !== -1 || normalized.indexOf('caregiver') !== -1)
+    );
+
+    if (isBookHomeCare) {
+      conversationState.lastService = 'home-care';
+      return {
+        text: "Booking home healthcare with Arovia is straightforward and managed through our direct coordination desk without complicated forms or app logins:\n\n" +
+              "1. **Call our Coordination Desk:** Contact our team directly at **" + AROVIA_PHONE_DISPLAY + "** with your patient's routine needs and physician instructions.\n" +
+              "2. **Care Assessment & Guidance:** We guide you on whether a dedicated **Caregiver** (for non-clinical daily living support like bathing, feeding, and mobility) or a **Registered Nurse** (for injections, IV therapy, sterile wound dressings, and vitals) is appropriate, along with shift schedules (daytime, overnight, or 24/7).\n" +
+              "3. **Transparent Confirmation:** Duties, schedule, and published charges are agreed before care begins.\n" +
+              "4. **Care Commences at Home:** Qualified care personnel are scheduled and arrive at your home according to the agreed schedule.\n\n" +
+              "Speak directly with our home care coordinators to settle your care requirements today.",
+        actions: [
+          { label: 'Call Care Desk: ' + AROVIA_PHONE_DISPLAY, url: AROVIA_PHONE_URI, isCall: true },
+          { label: 'WhatsApp Care Desk', url: AROVIA_WHATSAPP_URI, isWhatsApp: true },
+          { label: 'Explore Home Care', url: 'home-care.html' },
+          { label: 'Main Menu', isRestart: true }
+        ]
+      };
+    }
+
+    // 4. Question 4: How can I contact Arovia?
+    var isContactQuery = (
+      normalized.indexOf('how can i contact') !== -1 ||
+      normalized.indexOf('contact arovia') !== -1 ||
+      normalized.indexOf('contact') !== -1 ||
+      normalized.indexOf('phone') !== -1 ||
+      normalized.indexOf('call') !== -1 ||
+      normalized.indexOf('email') !== -1 ||
+      normalized.indexOf('mail') !== -1 ||
+      normalized.indexOf('number') !== -1 ||
+      normalized.indexOf('helpline') !== -1 ||
+      normalized.indexOf('address') !== -1 ||
+      normalized.indexOf('reach') !== -1
+    );
+
+    if (isContactQuery) {
+      return {
+        text: "You can contact Arovia directly through our published communication channels:\n\n" +
+              "• **Phone Helpline:** **" + AROVIA_PHONE_DISPLAY + "** (Direct telephone coordination)\n" +
+              "• **WhatsApp:** **" + AROVIA_PHONE_DISPLAY + "**\n" +
+              "• **Email Inquiries:** **" + AROVIA_EMAIL + "**\n" +
+              "• **Registered Office:** " + AROVIA_ADDRESS + "\n\n" +
+              "**Direct Coordination Model:** We coordinate care directly over phone and WhatsApp so you can speak immediately with a real healthcare coordinator without waiting for automated bots or web forms.",
+        actions: [
+          { label: 'Call ' + AROVIA_PHONE_DISPLAY, url: AROVIA_PHONE_URI, isCall: true },
+          { label: 'WhatsApp Arovia', url: AROVIA_WHATSAPP_URI, isWhatsApp: true },
+          { label: 'Email: ' + AROVIA_EMAIL, url: 'mailto:' + AROVIA_EMAIL },
+          { label: 'Contact Page', url: 'contact.html' },
+          { label: 'Main Menu', isRestart: true }
+        ]
+      };
+    }
+
+    // 5. Intent: Caregiver vs Registered Nurse Distinction
     var isCaregiverNurseDiff = (
       (normalized.indexOf('difference') !== -1 || normalized.indexOf('vs') !== -1 || normalized.indexOf('or') !== -1 || normalized.indexOf('between') !== -1) &&
       (normalized.indexOf('nurse') !== -1 || normalized.indexOf('nursing') !== -1) &&
@@ -396,12 +546,13 @@
               "In summary, caregivers handle everyday personal care and daily living assistance, while registered nurses carry out clinical nursing procedures.",
         actions: [
           { label: 'Explore Home Care', url: 'home-care.html' },
-          { label: 'Call for Guidance', url: AROVIA_PHONE_URI, isCall: true }
+          { label: 'Call for Guidance', url: AROVIA_PHONE_URI, isCall: true },
+          { label: 'Main Menu', isRestart: true }
         ]
       };
     }
 
-    // 5. Intent: Lab Tests & Home Sample Collection
+    // 6. Intent: Lab Tests & Home Sample Collection
     var isLabQuery = (
       normalized.indexOf('lab test') !== -1 ||
       normalized.indexOf('blood test') !== -1 ||
@@ -424,47 +575,19 @@
 
     if (isLabQuery) {
       conversationState.lastService = 'lab-tests';
-
-      // Specific query about home sample collection
-      if (normalized.indexOf('home') !== -1 || normalized.indexOf('come') !== -1 || normalized.indexOf('house') !== -1 || normalized.indexOf('visit') !== -1 || normalized.indexOf('collection') !== -1) {
-        return {
-          text: "Yes! For laboratory tests, **trained, qualified professionals visit the customer's home to collect samples** under sterile protocols (home sample collection).\n\n" +
-                "• **How it works:** Call our diagnostic desk via the helpline number in the header or footer with your doctor's requisition slip and fasting status. Our coordinator confirms preparation rules, quotes transparent published charges, and schedules a qualified phlebotomist to collect your sample at home.\n\n" +
-                "• **Available investigations:** Individual tests (CBC, Fasting Blood Sugar, HbA1c, Thyroid, Lipid Profile, LFT, KFT) and Comprehensive Health Packages.",
-          actions: [
-            { label: 'View Lab Tests Page', url: 'lab-tests.html' },
-            { label: 'Call Diagnostic Desk', url: AROVIA_PHONE_URI, isCall: true }
-          ]
-        };
-      }
-
-      // Query about lab prices or packages
-      if (normalized.indexOf('price') !== -1 || normalized.indexOf('cost') !== -1 || normalized.indexOf('package') !== -1 || normalized.indexOf('charge') !== -1 || normalized.indexOf('fee') !== -1) {
-        return {
-          text: "Arovia coordinates both individual diagnostic tests and comprehensive screening packages with professional home sample collection:\n\n" +
-                "• **Individual Tests:** Complete Blood Count (CBC), Fasting Blood Sugar (FBS), Glycated Hemoglobin (HbA1c), Lipid Profile, Thyroid Profile (T3, T4, TSH), Liver Function Test (LFT), and Kidney Function Test (KFT).\n" +
-                "• **Multi-Parameter Packages:** Comprehensive Health Checkup Packages, Senior Citizen Wellness Panels, and Metabolic Screenings.\n\n" +
-                "Charges are quoted transparently over the telephone before any testing is arranged, with no hidden platform fees. Please call our diagnostic desk via our helpline to verify current test fees and schedule collection.",
-          actions: [
-            { label: 'Explore Lab Tests', url: 'lab-tests.html' },
-            { label: 'Call for Pricing', url: AROVIA_PHONE_URI, isCall: true }
-          ]
-        };
-      }
-
-      // General lab query
       return {
-        text: "Arovia coordinates diagnostic laboratory investigations with **trained, qualified professionals visiting your home for sample collection**.\n\n" +
-              "• We offer individual tests (CBC, Fasting Sugar, HbA1c, Lipid, Thyroid, LFT, KFT) and bundled health screening packages.\n" +
-              "• To enquire or schedule, call our diagnostic desk directly via the helpline number in the header or footer with your doctor's requisition slip.",
+        text: "Arovia coordinates diagnostic laboratory investigations with **trained, qualified professionals visiting your home for sample collection** under sterile protocols.\n\n" +
+              "• **Investigations:** CBC, Fasting Sugar, HbA1c, Lipid Profile, Thyroid, LFT, KFT, and Comprehensive Health Packages.\n" +
+              "• **How to schedule:** Call our diagnostic desk with your doctor's requisition slip and fasting status. Charges are quoted transparently before testing.",
         actions: [
           { label: 'Lab Tests & Packages', url: 'lab-tests.html' },
-          { label: 'Call Diagnostic Desk', url: AROVIA_PHONE_URI, isCall: true }
+          { label: 'Call Diagnostic Desk', url: AROVIA_PHONE_URI, isCall: true },
+          { label: 'Main Menu', isRestart: true }
         ]
       };
     }
 
-    // 6. Intent: Home Care (Caregivers & Registered Nurses)
+    // 7. General Home Care Query
     var isHomeCareQuery = (
       normalized.indexOf('home care') !== -1 ||
       normalized.indexOf('homecare') !== -1 ||
@@ -473,108 +596,72 @@
       normalized.indexOf('nurse') !== -1 ||
       normalized.indexOf('nursing') !== -1 ||
       normalized.indexOf('attendant') !== -1 ||
-      normalized.indexOf('help my father') !== -1 ||
-      normalized.indexOf('help my mother') !== -1 ||
       normalized.indexOf('elderly care') !== -1 ||
-      normalized.indexOf('bedridden') !== -1 ||
-      normalized.indexOf('wound dressing') !== -1 ||
-      normalized.indexOf('injection') !== -1
+      normalized.indexOf('bedridden') !== -1
     );
 
     if (isHomeCareQuery) {
       conversationState.lastService = 'home-care';
       return {
-        text: "Arovia provides compassionate, dependable in-home care in two distinct categories:\n\n" +
-              "1. **Caregivers (Everyday Living Support):** Attendants who assist with bathing, dressing, meal support, mobility assistance, safe daily physical routines, and friendly companionship.\n" +
+        text: "Arovia provides compassionate in-home care in two distinct categories:\n\n" +
+              "1. **Caregivers (Daily Living Support):** Attendants who assist with bathing, dressing, meal support, mobility assistance, safe daily routines, and friendly companionship.\n" +
               "2. **Registered Nurses (Clinical Nursing):** Qualified clinical nurses who administer physician-prescribed injections, IV infusions, sterile wound dressings, catheter management, and vital signs monitoring.\n\n" +
-              "**How to arrange:** Call our coordination desk via the helpline number in the header or footer to discuss your patient's specific routine and clinical needs.",
+              "Call our coordination desk directly to discuss your loved one's specific care needs and shift timings.",
         actions: [
           { label: 'Explore Home Care', url: 'home-care.html' },
-          { label: 'Call Coordination Desk', url: AROVIA_PHONE_URI, isCall: true }
+          { label: 'Call Care Desk', url: AROVIA_PHONE_URI, isCall: true },
+          { label: 'Main Menu', isRestart: true }
         ]
       };
     }
 
-    // 7. Intent: Medical Equipment (28 items, International Export Only, No Online Prices)
+    // 8. Intent: Medical Equipment
     var isEquipmentQuery = (
       normalized.indexOf('medical equipment') !== -1 ||
       normalized.indexOf('equipment') !== -1 ||
       normalized.indexOf('hospital bed') !== -1 ||
       normalized.indexOf('icu bed') !== -1 ||
       normalized.indexOf('wheelchair') !== -1 ||
-      normalized.indexOf('stretcher') !== -1 ||
-      normalized.indexOf('trolley') !== -1 ||
-      normalized.indexOf('monitor') !== -1 ||
-      normalized.indexOf('av-het') !== -1 ||
-      normalized.indexOf('av-ei3a') !== -1 ||
-      normalized.indexOf('export') !== -1 ||
-      normalized.indexOf('international shipping') !== -1
+      normalized.indexOf('stretcher') !== -1
     );
 
     if (isEquipmentQuery) {
       conversationState.lastService = 'medical-equipment';
       return {
-        text: "Arovia coordinates a verified catalog of **28 hospital-grade equipment items** spanning electric ICU beds, hydraulic recovery stretchers, ward furniture, patient mobility aids (wheelchairs), and diagnostic monitors.\n\n" +
-              "**Important Equipment Policies:**\n" +
+        text: "Arovia coordinates a catalog of **28 hospital-grade equipment items** spanning electric ICU beds, hydraulic recovery stretchers, ward furniture, and wheelchairs.\n\n" +
               "• **International Export Only:** All equipment is supplied exclusively for international institutional and healthcare export.\n" +
-              "• **No Online Prices:** In accordance with Arovia policy, equipment prices are never published online due to destination port tariffs and institutional volume requirements.\n\n" +
-              "Browse product specifications on our Medical Equipment page and call our equipment desk to request a formal Proforma Invoice and shipping schedule.",
+              "• **Proforma Invoices:** Call our equipment desk to request formal pricing and international shipping schedules.",
         actions: [
           { label: 'View Equipment Catalog', url: 'medical-equipment.html' },
-          { label: 'Call Equipment Desk', url: AROVIA_PHONE_URI, isCall: true }
+          { label: 'Call Equipment Desk', url: AROVIA_PHONE_URI, isCall: true },
+          { label: 'Main Menu', isRestart: true }
         ]
       };
     }
 
-    // 8. Intent: Pharmacy & Medicines
+    // 9. Intent: Pharmacy & Medicines
     var isPharmacyQuery = (
       normalized.indexOf('pharmacy') !== -1 ||
       normalized.indexOf('medicine') !== -1 ||
       normalized.indexOf('medicines') !== -1 ||
-      normalized.indexOf('prescription') !== -1 ||
-      normalized.indexOf('pill') !== -1 ||
-      normalized.indexOf('tablet') !== -1 ||
-      normalized.indexOf('drug') !== -1
+      normalized.indexOf('prescription') !== -1
     );
 
     if (isPharmacyQuery) {
       conversationState.lastService = 'pharmacy';
       return {
-        text: "Arovia coordinates pharmaceutical dispensation for acute treatments, post-surgical recovery, and chronic disease maintenance (cardiac, diabetic, thyroid, and respiratory therapies):\n\n" +
-              "• **Prescription Verification:** In compliance with statutory drug regulations (Drugs & Cosmetics Act), all prescription medicines (Schedule H, H1, X) require a valid doctor's prescription.\n" +
-              "• **Responsible Healthcare:** Arovia does not provide unsupervised e-commerce checkouts, nor do we prescribe medicines or calculate individual dosages.\n\n" +
-              "To enquire about availability, prescription requirements, and the applicable price, please call our pharmacy desk directly via our helpline. This website does not show a live medicine list.",
+        text: "Arovia coordinates pharmaceutical dispensation for acute treatments, post-surgical recovery, and chronic disease maintenance.\n\n" +
+              "• All prescription medicines require a valid doctor's prescription.\n" +
+              "• To enquire about medicine availability and pricing, call our pharmacy desk directly.",
         actions: [
           { label: 'Explore Pharmacy Page', url: 'pharmacy.html' },
-          { label: 'Call Pharmacy Desk', url: AROVIA_PHONE_URI, isCall: true }
+          { label: 'Call Pharmacy Desk', url: AROVIA_PHONE_URI, isCall: true },
+          { label: 'Main Menu', isRestart: true }
         ]
       };
     }
 
-    // 9. Intent: Clinic / Outpatient Doctor Inquiries
-    var isClinicQuery = (
-      normalized.indexOf('clinic') !== -1 ||
-      normalized.indexOf('doctor appointment') !== -1 ||
-      normalized.indexOf('opd') !== -1
-    );
-
-    if (isClinicQuery) {
-      return {
-        text: "Arovia does not operate an outpatient clinic or doctor consultation service. We specialize in 5 active healthcare services:\n\n" +
-              "• **Home Care:** Everyday personal caregivers & registered nurses for clinical care at home\n" +
-              "• **Ambulance Services:** Non-emergency patient transit & hospital transfers\n" +
-              "• **Medical Equipment:** Hospital-grade beds, monitors, and surgical furniture for export\n" +
-              "• **Pharmacy Services:** Prescription and chronic medication coordination\n" +
-              "• **Diagnostic Lab Tests:** Blood tests and preventive panels with home sample collection\n\n" +
-              "Please call our helpline or explore our service pages for assistance.",
-        actions: [
-          { label: 'Explore Home Care', url: 'home-care.html' },
-          { label: 'Call Helpline', url: AROVIA_PHONE_URI, isCall: true }
-        ]
-      };
-    }
-
-    // 10. Intent: Ambulance & Transportation
+    // 10. Intent: Ambulance & Transit
     var isAmbulanceQuery = (
       normalized.indexOf('ambulance') !== -1 ||
       normalized.indexOf('patient transport') !== -1 ||
@@ -585,114 +672,27 @@
     if (isAmbulanceQuery) {
       conversationState.lastService = 'ambulance';
       return {
-        text: "Arovia coordinates safe, assisted patient transportation for scheduled hospital admissions, post-treatment discharges, diagnostic appointments, and inter-facility transfers:\n\n" +
-              "• **Emergency Advisory:** If a person is experiencing an acute, life-threatening emergency (such as severe chest pain, loss of consciousness, or difficulty breathing), please immediately dial emergency services (**108** or **112** in India).\n" +
-              "• **Arranging Transit:** For planned transfers, dial our transportation desk via our helpline to verify vehicle availability, route specifications, and stretcher support.",
+        text: "Arovia coordinates safe, assisted patient transportation for scheduled hospital admissions, post-treatment discharges, diagnostic appointments, and inter-facility transfers in Guntur.\n\n" +
+              "• **Emergency Note:** For acute life-threatening emergencies, immediately dial **108** or **112** in India.\n" +
+              "• For planned assisted transit, dial our transportation desk to verify vehicle availability.",
         actions: [
           { label: 'Explore Ambulance', url: 'ambulance.html' },
-          { label: 'Call Transportation Desk', url: AROVIA_PHONE_URI, isCall: true }
+          { label: 'Call Transportation Desk', url: AROVIA_PHONE_URI, isCall: true },
+          { label: 'Main Menu', isRestart: true }
         ]
       };
     }
 
-    // 11. Intent: Contact & Phone Inquiry
-    var isContactQuery = (
-      normalized.indexOf('contact') !== -1 ||
-      normalized.indexOf('phone') !== -1 ||
-      normalized.indexOf('call') !== -1 ||
-      normalized.indexOf('number') !== -1 ||
-      normalized.indexOf('location') !== -1 ||
-      normalized.indexOf('address') !== -1 ||
-      normalized.indexOf('guntur') !== -1 ||
-      normalized.indexOf('enquire') !== -1 ||
-      normalized.indexOf('inquire') !== -1 ||
-      normalized.indexOf('how to reach') !== -1
-    );
-
-    if (isContactQuery) {
+    // 11. Intent: Clinic Inquiries
+    if (normalized.indexOf('clinic') !== -1 || normalized.indexOf('doctor appointment') !== -1 || normalized.indexOf('opd') !== -1) {
       return {
-        text: "You can reach Arovia directly through our single point of contact:\n\n" +
-              "• **Official Phone Number:** **" + AROVIA_PHONE_DISPLAY + "**\n" +
-              "• **WhatsApp:** **" + AROVIA_PHONE_DISPLAY + "**\n" +
-              "• **Location:** Guntur, Andhra Pradesh\n" +
-              "• **Direct Model:** Direct phone and WhatsApp communication with no online forms, accounts, or automated voice bots required.\n\n" +
-              "Speak with our coordinators to discuss home care, ambulance transit, medical equipment export, pharmacy supplies, or diagnostic lab tests.",
+        text: "Arovia does not operate an outpatient clinic or doctor consultation service. We specialize in 5 active healthcare services: Home Care, Ambulance Transit, Medical Equipment Export, Pharmacy Coordination, and Diagnostic Lab Tests.",
         actions: [
-          { label: 'Call ' + AROVIA_PHONE_DISPLAY, url: AROVIA_PHONE_URI, isCall: true },
-          { label: 'WhatsApp Arovia', url: AROVIA_WHATSAPP_URI, isWhatsApp: true },
-          { label: 'Contact Page', url: 'contact.html' }
+          { label: 'Explore Services', url: 'index.html#services' },
+          { label: 'Call Helpline', url: AROVIA_PHONE_URI, isCall: true },
+          { label: 'Main Menu', isRestart: true }
         ]
       };
-    }
-
-    // 12. Intent: Services Overview / General Introduction
-    var isOverviewQuery = (
-      normalized.indexOf('service') !== -1 ||
-      normalized.indexOf('provide') !== -1 ||
-      normalized.indexOf('offer') !== -1 ||
-      normalized.indexOf('about arovia') !== -1 ||
-      normalized.indexOf('what do you do') !== -1 ||
-      normalized.indexOf('who are you') !== -1 ||
-      normalized.indexOf('help') !== -1
-    );
-
-    if (isOverviewQuery) {
-      return {
-        text: "I'm **AVI**, Arovia's Virtual Assistant! Arovia coordinates five essential healthcare services:\n\n" +
-              "1. **Home Care:** Everyday personal caregivers and clinical registered nurses.\n" +
-              "2. **Ambulance:** Coordinated patient transport for admissions, consultations, and transfers.\n" +
-              "3. **Medical Equipment:** 28 hospital-grade items supplied for international export.\n" +
-              "4. **Pharmacy:** Prescription and maintenance medicine coordination.\n" +
-              "5. **Lab Tests:** Diagnostic laboratory investigations with trained professionals collecting samples at your home.\n\n" +
-              "Which service would you like to explore?",
-        actions: [
-          { label: 'Home Care', url: 'home-care.html' },
-          { label: 'Lab Tests', url: 'lab-tests.html' },
-          { label: 'Call Arovia', url: AROVIA_PHONE_URI, isCall: true }
-        ]
-      };
-    }
-
-    // 13. Contextual Follow-up (e.g., "How much is it?", "What is the price?", "How do I book?")
-    if (conversationState.lastService) {
-      if (normalized.indexOf('price') !== -1 || normalized.indexOf('cost') !== -1 || normalized.indexOf('charge') !== -1 || normalized.indexOf('how much') !== -1) {
-        if (conversationState.lastService === 'medical-equipment') {
-          return {
-            text: "In accordance with Arovia policy, medical equipment prices are never published online as all 28 items are supplied for international export where shipping charges, quantities, and port tariffs vary. Please call our equipment desk for a formal Proforma Invoice.",
-            actions: [
-              { label: 'Equipment Catalog', url: 'medical-equipment.html' },
-              { label: 'Call Equipment Desk', url: AROVIA_PHONE_URI, isCall: true }
-            ]
-          };
-        }
-        if (conversationState.lastService === 'lab-tests') {
-          return {
-            text: "Diagnostic test charges are quoted transparently over the telephone before any testing is arranged, based on whether you require individual tests or multi-parameter screening packages. Call our diagnostic desk via the helpline number in the header or footer for exact quotes.",
-            actions: [
-              { label: 'View Lab Tests', url: 'lab-tests.html' },
-              { label: 'Call Diagnostic Desk', url: AROVIA_PHONE_URI, isCall: true }
-            ]
-          };
-        }
-        if (conversationState.lastService === 'pharmacy') {
-          return {
-            text: "The applicable medicine price is confirmed by the pharmacy desk during your enquiry. Prices are not listed on the website. Please call the helpline to ask about availability and pricing.",
-            actions: [
-              { label: 'Pharmacy Page', url: 'pharmacy.html' },
-              { label: 'Call Pharmacy Desk', url: AROVIA_PHONE_URI, isCall: true }
-            ]
-          };
-        }
-        if (conversationState.lastService === 'home-care') {
-          return {
-            text: "Home care arrangements depend on whether your patient requires non-clinical daily living assistance (Caregiver) or skilled medical procedures (Registered Nurse), as well as routine duration. Call our coordination desk via the helpline number in the header or footer to discuss your situation and receive transparent quotes.",
-            actions: [
-              { label: 'Home Care Details', url: 'home-care.html' },
-              { label: 'Call for Home Care', url: AROVIA_PHONE_URI, isCall: true }
-            ]
-          };
-        }
-      }
     }
 
     // 14. Unknown / Ambiguous Healthcare Question Fallback
@@ -996,8 +996,8 @@
     document.body.appendChild(bubble);
     document.body.appendChild(chatWindow);
 
-    // Initial render of welcome suggestions (no auto-bot greeting bubble)
-    renderWelcomeState();
+    // Restore previous conversation in this browser tab session, or show initial welcome
+    restoreOrInitConversation(launcher, chatWindow, bubble);
 
     // Attach Event Listeners
     setupChatbotEvents(launcher, chatWindow, bubble);
@@ -1011,13 +1011,35 @@
     var messagesContainer = document.getElementById('aroviaChatMessages');
     if (!messagesContainer) return;
 
+    clearSessionState();
     messagesContainer.innerHTML = '';
+    conversationState.history = [];
+    conversationState.lastService = null;
+    conversationState.isTyping = false;
 
-    // Suggested Questions Chips Area (Clean Initial Screen)
+    // 1. Initial Greeting Message from AVI: "Hi! I'm AVI, your AI assistant. 👋"
+    var greetingMsg1 = document.createElement('div');
+    greetingMsg1.className = 'arovia-chat-msg arovia-chat-msg--bot';
+    greetingMsg1.innerHTML =
+      '<div class="arovia-chat-msg__bubble">' +
+        '<p>Hi! I\'m AVI, your AI assistant. 👋</p>' +
+      '</div>';
+    messagesContainer.appendChild(greetingMsg1);
+
+    // 2. Immediate Follow-up Question from AVI: "How can I help you today?"
+    var greetingMsg2 = document.createElement('div');
+    greetingMsg2.className = 'arovia-chat-msg arovia-chat-msg--bot arovia-chat-msg--greeting-second';
+    greetingMsg2.innerHTML =
+      '<div class="arovia-chat-msg__bubble">' +
+        '<p>How can I help you today?</p>' +
+      '</div>' +
+      '<div class="arovia-chat-msg__time">' + getCurrentTime() + '</div>';
+    messagesContainer.appendChild(greetingMsg2);
+
+    // 3. Exactly four clickable questions underneath
     var suggestionsContainer = document.createElement('div');
     suggestionsContainer.className = 'arovia-chat-suggestions arovia-chat-suggestions--default';
     suggestionsContainer.id = 'aroviaDefaultSuggestions';
-    suggestionsContainer.innerHTML = '<div class="arovia-chat-suggestions__header">HOW CAN I HELP YOU?</div>';
 
     var listDiv = document.createElement('div');
     listDiv.className = 'arovia-chat-suggestions__list';
@@ -1034,42 +1056,10 @@
       return chip;
     }
 
-    // Show initial 3 questions, with 'More questions' button revealing remaining 5
-    var initialQuestions = DEFAULT_SUGGESTIONS.slice(0, 3);
-    var remainingQuestions = DEFAULT_SUGGESTIONS.slice(3);
-
-    initialQuestions.forEach(function (question) {
+    DEFAULT_SUGGESTIONS.forEach(function (question) {
       listDiv.appendChild(createChip(question));
     });
 
-    // Expandable wrap for remaining questions
-    var remainingWrap = document.createElement('div');
-    remainingWrap.className = 'arovia-chat-suggestions__remaining';
-    remainingWrap.style.display = 'none';
-    remainingWrap.style.flexDirection = 'column';
-    remainingWrap.style.gap = '6px';
-
-    remainingQuestions.forEach(function (question) {
-      remainingWrap.appendChild(createChip(question));
-    });
-
-    listDiv.appendChild(remainingWrap);
-
-    var moreBtn = document.createElement('button');
-    moreBtn.type = 'button';
-    moreBtn.className = 'arovia-chat-chip-more';
-    moreBtn.id = 'aroviaMoreQuestionsBtn';
-    moreBtn.innerHTML = '<span>More questions (' + remainingQuestions.length + ') ↓</span>';
-    moreBtn.addEventListener('click', function () {
-      var isHidden = remainingWrap.style.display === 'none';
-      remainingWrap.style.display = isHidden ? 'flex' : 'none';
-      moreBtn.innerHTML = isHidden ? '<span>Fewer questions ↑</span>' : '<span>More questions (' + remainingQuestions.length + ') ↓</span>';
-      if (isHidden) {
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
-      }
-    });
-
-    listDiv.appendChild(moreBtn);
     suggestionsContainer.appendChild(listDiv);
     messagesContainer.appendChild(suggestionsContainer);
 
@@ -1077,11 +1067,48 @@
   }
 
   /**
+   * Restore conversation from sessionStorage if visitor navigates pages within the same tab,
+   * preserving conversation until the visitor closes that tab.
+   */
+  function restoreOrInitConversation(launcher, chatWindow, bubble) {
+    var saved = getSavedSessionState();
+    var messagesContainer = document.getElementById('aroviaChatMessages');
+    var waButton = document.getElementById('aroviaWhatsappFloat');
+
+    if (saved && saved.history && saved.history.length > 0) {
+      if (messagesContainer) messagesContainer.innerHTML = '';
+      conversationState.history = saved.history ? saved.history.slice() : [];
+      conversationState.lastService = saved.lastService || null;
+
+      saved.history.forEach(function (item) {
+        appendMessage(item.sender, item.text, item.actions, item.showSuggestions, item.time, true);
+      });
+
+      if (saved.isOpen && chatWindow) {
+        conversationState.isOpen = true;
+        chatWindow.classList.add('is-open');
+        chatWindow.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('arovia-chat-open');
+        if (launcher) {
+          launcher.classList.add('is-active');
+          launcher.setAttribute('aria-expanded', 'true');
+        }
+        if (bubble) bubble.classList.add('is-dismissed');
+        if (waButton) waButton.classList.add('is-chat-open');
+      }
+    } else {
+      renderWelcomeState();
+    }
+  }
+
+  /**
    * Add a message bubble to the chat conversation
    */
-  function appendMessage(sender, text, actions, showSuggestions) {
+  function appendMessage(sender, text, actions, showSuggestions, time, skipSave) {
     var messagesContainer = document.getElementById('aroviaChatMessages');
     if (!messagesContainer) return;
+
+    var msgTime = time || getCurrentTime();
 
     var msgDiv = document.createElement('div');
     msgDiv.className = 'arovia-chat-msg arovia-chat-msg--' + sender;
@@ -1094,17 +1121,22 @@
     if (actions && actions.length > 0) {
       bubbleHtml += '<div class="arovia-chat-msg__actions">';
       actions.forEach(function (act) {
-        var btnClass = act.isCall ? 'arovia-chat-action-btn arovia-chat-action-btn--call' :
-                       act.isWhatsApp ? 'arovia-chat-action-btn arovia-chat-action-btn--whatsapp' :
-                       'arovia-chat-action-btn';
-        var icon = act.isCall ? '📞 ' : act.isWhatsApp ? '💬 ' : '🔗 ';
-        var targetAttr = act.isCall ? '' : (act.isWhatsApp ? 'target="_blank" rel="noopener noreferrer"' : 'target="_self"');
-        bubbleHtml += '<a href="' + act.url + '" class="' + btnClass + '" ' + targetAttr + '>' + icon + act.label + '</a>';
+        if (act.isRestart) {
+          bubbleHtml += '<button type="button" class="arovia-chat-action-btn arovia-chat-action-btn--restart" data-action="restart">🔄 ' + act.label + '</button>';
+        } else {
+          var btnClass = act.isCall ? 'arovia-chat-action-btn arovia-chat-action-btn--call' :
+                         act.isWhatsApp ? 'arovia-chat-action-btn arovia-chat-action-btn--whatsapp' :
+                         'arovia-chat-action-btn';
+          var isMail = act.url && act.url.startsWith('mailto:');
+          var icon = act.isCall ? '📞 ' : act.isWhatsApp ? '💬 ' : isMail ? '✉️ ' : '🔗 ';
+          var targetAttr = (act.isCall || isMail) ? '' : (act.isWhatsApp ? 'target="_blank" rel="noopener noreferrer"' : 'target="_self"');
+          bubbleHtml += '<a href="' + act.url + '" class="' + btnClass + '" ' + targetAttr + '>' + icon + act.label + '</a>';
+        }
       });
       bubbleHtml += '</div>';
     }
 
-    bubbleHtml += '</div><div class="arovia-chat-msg__time">' + getCurrentTime() + '</div>';
+    bubbleHtml += '</div><div class="arovia-chat-msg__time">' + msgTime + '</div>';
     msgDiv.innerHTML = bubbleHtml;
 
     messagesContainer.appendChild(msgDiv);
@@ -1131,6 +1163,17 @@
 
       suggestionsContainer.appendChild(listDiv);
       messagesContainer.appendChild(suggestionsContainer);
+    }
+
+    if (!skipSave) {
+      conversationState.history.push({
+        sender: sender,
+        text: text,
+        actions: actions,
+        showSuggestions: showSuggestions,
+        time: msgTime
+      });
+      saveSessionState();
     }
 
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
@@ -1207,6 +1250,19 @@
    * Setup UI interactions, accessibility and keyboard handlers
    */
   function setupChatbotEvents(launcher, chatWindow, bubble) {
+    var messagesContainer = document.getElementById('aroviaChatMessages');
+    if (messagesContainer) {
+      messagesContainer.addEventListener('click', function (e) {
+        var restartBtn = e.target.closest('[data-action="restart"]');
+        if (restartBtn) {
+          e.preventDefault();
+          clearSessionState();
+          renderWelcomeState();
+          var inputField = document.getElementById('aroviaChatInput');
+          if (inputField) inputField.focus();
+        }
+      });
+    }
     var closeBtn = document.getElementById('aroviaChatClose');
     var resetBtn = document.getElementById('aroviaChatReset');
     var form = document.getElementById('aroviaChatForm');
@@ -1265,6 +1321,7 @@
       launcher.setAttribute('aria-expanded', 'true');
       chatWindow.setAttribute('aria-hidden', 'false');
 
+      saveSessionState();
       if (input) {
         setTimeout(function () { input.focus(); }, 150);
       }
@@ -1278,6 +1335,7 @@
       document.body.classList.remove('arovia-chat-open');
       launcher.setAttribute('aria-expanded', 'false');
       chatWindow.setAttribute('aria-hidden', 'true');
+      saveSessionState();
       launcher.focus();
     }
 
@@ -1296,6 +1354,7 @@
     if (resetBtn) {
       resetBtn.addEventListener('click', function (e) {
         e.preventDefault();
+        clearSessionState();
         conversationState.lastService = null;
         renderWelcomeState();
         if (input) input.focus();
@@ -1340,7 +1399,11 @@
     // Click outside chat window to close
     document.addEventListener('click', function (e) {
       if (!conversationState.isOpen) return;
-      if (chatWindow && !chatWindow.contains(e.target) && launcher && !launcher.contains(e.target) && (!waButton || !waButton.contains(e.target))) {
+      var path = e.composedPath ? e.composedPath() : [];
+      var isInsideChat = (chatWindow && (chatWindow.contains(e.target) || path.indexOf(chatWindow) !== -1));
+      var isInsideLauncher = (launcher && (launcher.contains(e.target) || path.indexOf(launcher) !== -1));
+      var isInsideWA = (waButton && (waButton.contains(e.target) || path.indexOf(waButton) !== -1));
+      if (!isInsideChat && !isInsideLauncher && !isInsideWA) {
         closeChat();
       }
     });

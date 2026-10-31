@@ -107,12 +107,14 @@
    */
   function highlightActiveNav() {
     var path = window.location.pathname;
-    var filename = path.substring(path.lastIndexOf('/') + 1) || 'index.html';
+    var rawFile = path.substring(path.lastIndexOf('/') + 1) || 'index.html';
+    var cleanName = rawFile.replace(/\.html$/, '').toLowerCase() || 'index';
 
     var navLinks = document.querySelectorAll('.main-nav__link, .mobile-drawer__link');
     navLinks.forEach(function (link) {
-      var href = link.getAttribute('href');
-      if (href === filename || (filename === '' && href === 'index.html')) {
+      var href = link.getAttribute('href') || '';
+      var linkClean = href.replace(/\.html$/, '').replace(/^\.\//, '').toLowerCase();
+      if (linkClean === cleanName || (cleanName === 'index' && (linkClean === '' || linkClean === 'index'))) {
         link.classList.add('main-nav__link--active');
         link.classList.add('mobile-drawer__link--active');
         link.setAttribute('aria-current', 'page');
@@ -266,41 +268,143 @@
       });
     });
 
-    function showConnectDock() {
+    // Storage key for cross-page persistence of the connect dock state
+    var CONNECT_STORAGE_KEY = 'arovia_connect_dock_state';
+
+    function getStoredConnectState() {
+      try {
+        var val = localStorage.getItem(CONNECT_STORAGE_KEY);
+        if (val === 'vanished' || val === 'visible') return val;
+      } catch (e) {}
+      try {
+        var sVal = sessionStorage.getItem(CONNECT_STORAGE_KEY);
+        if (sVal === 'vanished' || sVal === 'visible') return sVal;
+      } catch (e) {}
+      return null;
+    }
+
+    function setStoredConnectState(state) {
+      try {
+        localStorage.setItem(CONNECT_STORAGE_KEY, state);
+      } catch (e) {}
+      try {
+        sessionStorage.setItem(CONNECT_STORAGE_KEY, state);
+      } catch (e) {}
+    }
+
+    function showConnectDock(skipPersist, instant) {
+      if (instant) {
+        connectDropdown.classList.add('no-transition');
+      }
       connectDropdown.classList.remove('is-vanished');
+      connectDropdown.classList.add('is-open');
       mainConnectBtn.setAttribute('aria-expanded', 'true');
       if (connectDock) {
         connectDock.setAttribute('aria-hidden', 'false');
       }
+      if (!skipPersist) {
+        setStoredConnectState('visible');
+      }
+      if (instant) {
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
+            connectDropdown.classList.remove('no-transition');
+          });
+        });
+      }
       announceToScreenReader('Social media channels visible.');
     }
 
-    function vanishConnectDock() {
+    function vanishConnectDock(skipPersist, instant) {
+      if (instant) {
+        connectDropdown.classList.add('no-transition');
+      }
       connectDropdown.classList.add('is-vanished');
+      connectDropdown.classList.remove('is-open');
       mainConnectBtn.setAttribute('aria-expanded', 'false');
       if (connectDock) {
         connectDock.setAttribute('aria-hidden', 'true');
       }
+      if (!skipPersist) {
+        setStoredConnectState('vanished');
+      }
+      if (instant) {
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
+            connectDropdown.classList.remove('no-transition');
+          });
+        });
+      }
       announceToScreenReader('Social media channels hidden.');
     }
 
-    // Set initial state: Logos are visible by default ("otherwise they have to be there")
-    mainConnectBtn.setAttribute('aria-expanded', 'true');
-    if (connectDock) {
-      connectDock.setAttribute('aria-hidden', 'false');
+    // Set initial state:
+    // Respect stored cross-page user preference if present, otherwise default to visible on desktop
+    var initialPref = getStoredConnectState();
+    if (window.innerWidth <= 992) {
+      vanishConnectDock(true, true);
+    } else {
+      if (initialPref === 'vanished') {
+        vanishConnectDock(true, true);
+      } else {
+        showConnectDock(true, true);
+      }
     }
 
-    // Connect button toggle listener: clicking Connect button vanishes / reveals the logos
+    // Responsive resize listener: keep state synchronized across viewport changes
+    window.addEventListener('resize', function () {
+      if (window.innerWidth <= 992) {
+        if (!connectDropdown.classList.contains('is-open')) {
+          vanishConnectDock(true, true);
+        }
+      } else {
+        var currentPref = getStoredConnectState();
+        if (currentPref === 'vanished') {
+          vanishConnectDock(true, true);
+        } else {
+          showConnectDock(true, true);
+        }
+      }
+    });
+
+    // Cross-tab synchronization: when toggled in one tab, reflect across all open tabs
+    window.addEventListener('storage', function (e) {
+      if (e.key === CONNECT_STORAGE_KEY && window.innerWidth > 992) {
+        if (e.newValue === 'vanished') {
+          vanishConnectDock(true, false);
+        } else if (e.newValue === 'visible') {
+          showConnectDock(true, false);
+        }
+      }
+    });
+
+    // Connect button toggle listener: clicking Connect button vanishes / reveals the logos across all pages
     mainConnectBtn.addEventListener('click', function (e) {
       e.preventDefault();
       e.stopPropagation();
-      var isVanished = connectDropdown.classList.contains('is-vanished');
-      if (isVanished) {
-        showConnectDock();
+      var isMobile = window.innerWidth <= 992;
+      if (isMobile) {
+        var isOpen = connectDropdown.classList.contains('is-open');
+        if (isOpen) {
+          vanishConnectDock(false, false);
+        } else {
+          showConnectDock(false, false);
+        }
       } else {
-        vanishConnectDock();
+        var isVanished = connectDropdown.classList.contains('is-vanished');
+        if (isVanished) {
+          // If currently vanished, clicking Connect reveals the icons across all pages
+          showConnectDock(false, false);
+        } else {
+          // If currently visible, clicking Connect vanishes the icons across all pages
+          vanishConnectDock(false, false);
+        }
       }
     });
+
+    // Per requirement: The social icons stay visible at all times unless
+    // the user explicitly clicks the Connect button to vanish / reveal them.
+    // Outside clicks and key events do NOT dismiss the icons.
 
     // Mobile drawer connect button listener
     var drawerConnectBtn = document.querySelector('.btn--connect-mobile');
@@ -332,8 +436,11 @@
       line.id = 'scrollProgressLine';
       line.className = 'scroll-progress-line';
       line.setAttribute('aria-hidden', 'true');
+      var topbar = document.querySelector('.topbar');
       var header = document.querySelector('.site-header');
-      if (header && header.parentNode) {
+      if (topbar && topbar.parentNode) {
+        topbar.parentNode.insertBefore(line, topbar);
+      } else if (header && header.parentNode) {
         header.parentNode.insertBefore(line, header);
       } else {
         document.body.insertBefore(line, document.body.firstChild);
@@ -424,7 +531,7 @@
     document.documentElement.classList.add('js-loaded');
 
     // 1. Staggered Word Reveal for Main Hero Headings (Reference: verseWordReveal)
-    var heroTitle = document.querySelector('.hero__title, .page-header__title');
+    var heroTitle = document.querySelector('.hero:not(.hero--carousel) .hero__title, .page-header__title');
     if (heroTitle && !heroTitle.dataset.wordsSplit) {
       heroTitle.dataset.wordsSplit = 'true';
       var text = heroTitle.textContent.trim();
@@ -444,22 +551,22 @@
     }
 
     // 2. Add entrance classes to Hero elements
-    var heroBadge = document.querySelector('.hero__badge, .page-header__badge');
+    var heroBadge = document.querySelector('.hero:not(.hero--carousel) .hero__badge, .page-header__badge');
     if (heroBadge) heroBadge.classList.add('hero__badge-anim');
 
-    var heroIntro = document.querySelector('.hero__intro, .page-header__subtitle');
+    var heroIntro = document.querySelector('.hero:not(.hero--carousel) .hero__intro, .page-header__subtitle');
     if (heroIntro) heroIntro.classList.add('hero__intro-anim');
 
-    var heroActions = document.querySelector('.hero__actions, .page-header__actions');
+    var heroActions = document.querySelector('.hero:not(.hero--carousel) .hero__actions, .page-header__actions');
     if (heroActions) heroActions.classList.add('hero__actions-anim');
 
-    var heroImage = document.querySelector('.hero__image-card');
+    var heroImage = document.querySelector('.hero:not(.hero--carousel) .hero__image-card');
     if (heroImage) heroImage.classList.add('hero__image-anim');
 
     // 3. Scroll-Triggered Reveals for Section Headers & Content Blocks
     var targets = document.querySelectorAll(
-      'section > .container > div:first-child, ' +
-      '.section > .container > div:first-child, ' +
+      'section:not(.section--testimonials) > .container > div:first-child, ' +
+      '.section:not(.section--testimonials) > .container > div:first-child, ' +
       '.service-detail-grid, ' +
       '.why-grid, ' +
       '.services-category-grid, ' +
@@ -509,14 +616,650 @@
     }
   }
 
+  /**
+   * Interactive Healthcare Situations Navigator ("Find the Care You Need")
+   * Implements accessible tab switching, keyboard arrow navigation, and smooth panel transitions.
+   */
+  function initCareSituationNavigator() {
+    var tabList = document.querySelector('.care-scenario-tabs');
+    if (!tabList) return;
+
+    var tabs = Array.from(tabList.querySelectorAll('.care-tab-btn'));
+    var panels = Array.from(document.querySelectorAll('.care-scenario-panel'));
+    if (!tabs.length || !panels.length) return;
+
+    function activateTab(targetTab) {
+      var targetPanelId = targetTab.getAttribute('aria-controls');
+      var targetPanel = document.getElementById(targetPanelId);
+      if (!targetPanel) return;
+
+      // Update tabs state
+      tabs.forEach(function (tab) {
+        var isTarget = tab === targetTab;
+        tab.classList.toggle('is-active', isTarget);
+        tab.setAttribute('aria-selected', isTarget ? 'true' : 'false');
+        tab.setAttribute('tabindex', isTarget ? '0' : '-1');
+      });
+
+      // Update panels state
+      panels.forEach(function (panel) {
+        var isTarget = panel === targetPanel;
+        if (isTarget) {
+          panel.classList.add('is-active');
+        } else {
+          panel.classList.remove('is-active');
+        }
+      });
+
+      // Ensure active tab is visible in scroll container (especially on mobile/tablet)
+      if (tabList.scrollWidth > tabList.clientWidth) {
+        targetTab.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+          inline: 'center'
+        });
+      }
+    }
+
+    // Click handlers
+    tabs.forEach(function (tab) {
+      tab.addEventListener('click', function (e) {
+        e.preventDefault();
+        activateTab(tab);
+      });
+    });
+
+    // Keyboard navigation (WAI-ARIA Tablist Pattern)
+    tabList.addEventListener('keydown', function (e) {
+      var currentTab = document.activeElement;
+      var currentIndex = tabs.indexOf(currentTab);
+      if (currentIndex === -1) return;
+
+      var newIndex = -1;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        newIndex = (currentIndex + 1) % tabs.length;
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        newIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        newIndex = 0;
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        newIndex = tabs.length - 1;
+      }
+
+      if (newIndex !== -1) {
+        tabs[newIndex].focus();
+        activateTab(tabs[newIndex]);
+      }
+    });
+  }
+
+  /**
+   * Homepage Hero Carousel Component
+   * Supports 3-slide crossfade, auto-advance with hover pause,
+   * mobile touch swiping, and reduced-motion accessibility.
+   */
+  function initHeroCarousel() {
+    var carousel = document.getElementById('heroCarousel');
+    if (!carousel) return;
+
+    var slides = carousel.querySelectorAll('.hero-carousel__slide');
+    var dots = carousel.querySelectorAll('.hero-carousel__dot');
+    var prevBtn = document.getElementById('heroCarouselPrev');
+    var nextBtn = document.getElementById('heroCarouselNext');
+
+    if (!slides.length) return;
+
+    var currentIndex = 0;
+    var totalSlides = slides.length;
+    var timer = null;
+    var AUTO_INTERVAL = 3000; // 6 seconds
+    var isPaused = false;
+    var prefersReducedMotion = false;
+
+    try {
+      prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    } catch (e) {}
+
+    function showSlide(index, announce) {
+      if (index < 0) {
+        index = totalSlides - 1;
+      } else if (index >= totalSlides) {
+        index = 0;
+      }
+      currentIndex = index;
+
+      slides.forEach(function (slide, idx) {
+        if (idx === currentIndex) {
+          slide.classList.add('hero-carousel__slide--active');
+          slide.setAttribute('aria-hidden', 'false');
+        } else {
+          slide.classList.remove('hero-carousel__slide--active');
+          slide.setAttribute('aria-hidden', 'true');
+        }
+      });
+
+      dots.forEach(function (dot, idx) {
+        if (idx === currentIndex) {
+          dot.classList.add('hero-carousel__dot--active');
+          dot.setAttribute('aria-selected', 'true');
+        } else {
+          dot.classList.remove('hero-carousel__dot--active');
+          dot.setAttribute('aria-selected', 'false');
+        }
+      });
+
+      if (announce && typeof announceToScreenReader === 'function') {
+        var slideTitle = slides[currentIndex].querySelector('.hero__title');
+        if (slideTitle) {
+          announceToScreenReader('Slide ' + (currentIndex + 1) + ' of ' + totalSlides + ': ' + slideTitle.textContent.trim());
+        }
+      }
+    }
+
+    function nextSlide() {
+      showSlide(currentIndex + 1, false);
+    }
+
+    function prevSlide() {
+      showSlide(currentIndex - 1, false);
+    }
+
+    function startTimer() {
+      if (prefersReducedMotion || isPaused) return;
+      stopTimer();
+      timer = setInterval(function () {
+        nextSlide();
+      }, AUTO_INTERVAL);
+    }
+
+    function stopTimer() {
+      if (timer) {
+        clearInterval(timer);
+        timer = null;
+      }
+    }
+
+    // Previous & Next button handlers
+    if (prevBtn) {
+      prevBtn.addEventListener('click', function () {
+        prevSlide();
+        startTimer();
+      });
+    }
+
+    if (nextBtn) {
+      nextBtn.addEventListener('click', function () {
+        nextSlide();
+        startTimer();
+      });
+    }
+
+    // Dot pagination click handlers
+    dots.forEach(function (dot) {
+      dot.addEventListener('click', function () {
+        var targetIdx = parseInt(dot.getAttribute('data-slide-target'), 10);
+        if (!isNaN(targetIdx) && targetIdx !== currentIndex) {
+          showSlide(targetIdx, true);
+          startTimer();
+        }
+      });
+    });
+
+    // Pause on hover
+    carousel.addEventListener('mouseenter', function () {
+      isPaused = true;
+      stopTimer();
+    });
+
+    carousel.addEventListener('mouseleave', function () {
+      isPaused = false;
+      startTimer();
+    });
+
+    // Pause on focus
+    carousel.addEventListener('focusin', function () {
+      isPaused = true;
+      stopTimer();
+    });
+
+    carousel.addEventListener('focusout', function () {
+      isPaused = false;
+      startTimer();
+    });
+
+    // Keyboard navigation within carousel
+    carousel.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        prevSlide();
+        startTimer();
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        nextSlide();
+        startTimer();
+      }
+    });
+
+    // Mobile touch swipe gestures
+    var touchStartX = 0;
+    var touchStartY = 0;
+    var touchEndX = 0;
+    var touchEndY = 0;
+    var SWIPE_THRESHOLD = 45;
+
+    carousel.addEventListener('touchstart', function (e) {
+      if (e.touches && e.touches.length > 0) {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+        touchEndX = touchStartX;
+        touchEndY = touchStartY;
+        isPaused = true;
+        stopTimer();
+      }
+    }, { passive: true });
+
+    carousel.addEventListener('touchmove', function (e) {
+      if (e.touches && e.touches.length > 0) {
+        touchEndX = e.touches[0].clientX;
+        touchEndY = e.touches[0].clientY;
+      }
+    }, { passive: true });
+
+    carousel.addEventListener('touchend', function () {
+      var deltaX = touchEndX - touchStartX;
+      var deltaY = touchEndY - touchStartY;
+
+      if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > SWIPE_THRESHOLD) {
+        if (deltaX < 0) {
+          nextSlide();
+        } else {
+          prevSlide();
+        }
+      }
+
+      touchStartX = 0;
+      touchEndX = 0;
+      touchStartY = 0;
+      touchEndY = 0;
+      isPaused = false;
+      startTimer();
+    }, { passive: true });
+
+    // Listen for reduced motion preference changes
+    try {
+      var motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+      motionQuery.addEventListener('change', function (e) {
+        prefersReducedMotion = e.matches;
+        if (prefersReducedMotion) {
+          stopTimer();
+        } else {
+          startTimer();
+        }
+      });
+    } catch (err) {}
+
+    // Initialize first slide and start auto-advance
+    showSlide(0, false);
+    startTimer();
+  }
+
+  /**
+   * Sticky Header Scroll State
+   * Toggles elevated shadow on white header when scrolled
+   */
+  function initHeaderScrollState() {
+    var header = document.querySelector('.site-header');
+    if (!header) return;
+
+    function onHeaderScroll() {
+      var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+      if (scrollTop > 10) {
+        header.classList.add('site-header--scrolled', 'is-scrolled');
+      } else {
+        header.classList.remove('site-header--scrolled', 'is-scrolled');
+      }
+    }
+
+    window.addEventListener('scroll', onHeaderScroll, { passive: true });
+    onHeaderScroll();
+  }
+
   // Initialize all interactive modules on DOM Ready
+    /**
+   * Client Testimonials Slider (Tamtech-Style Centered Active Carousel)
+   * Smooth infinite clone-based looping, autoplay with pause on hover/focus,
+   * accessible controls, safety timeouts, and responsive centered positioning.
+   */
+  function initTestimonialsSliders() {
+    var sliders = document.querySelectorAll('.testimonials-slider');
+    if (!sliders.length) return;
+
+    sliders.forEach(function (slider) {
+      var viewport = slider.querySelector('.testimonials-slider__viewport');
+      var track = slider.querySelector('.testimonials-slider__track');
+      var prevBtn = slider.querySelector('.testimonials-slider__arrow--prev');
+      var nextBtn = slider.querySelector('.testimonials-slider__arrow--next');
+      var dotsWrap = slider.querySelector('.testimonials-slider__pagination');
+
+      if (!viewport || !track) return;
+
+      var originalCards = Array.from(track.children);
+      var N = originalCards.length;
+      if (N < 2) return;
+
+      var CLONES = 2; // Clone 2 cards on each end for smooth peeking and transitions
+
+      // Clone at end (first CLONES items)
+      for (var i = 0; i < CLONES; i++) {
+        var cloneEnd = originalCards[i].cloneNode(true);
+        cloneEnd.setAttribute('data-clone', 'end');
+        cloneEnd.setAttribute('aria-hidden', 'true');
+        track.appendChild(cloneEnd);
+      }
+
+      // Clone at start (last CLONES items)
+      for (var j = N - 1; j >= N - CLONES; j--) {
+        var cloneStart = originalCards[j].cloneNode(true);
+        cloneStart.setAttribute('data-clone', 'start');
+        cloneStart.setAttribute('aria-hidden', 'true');
+        track.insertBefore(cloneStart, track.firstChild);
+      }
+
+      var allCards = Array.from(track.children);
+      var domIndex = CLONES; // Start at real slide 0
+      var isTransitioning = false;
+      var transitionSafetyTimer = null;
+      var autoplayTimer = null;
+      var AUTOPLAY_DELAY = 4500; // 4.5 seconds
+
+      // Create pagination dots
+      if (dotsWrap) {
+        dotsWrap.innerHTML = '';
+        for (var k = 0; k < N; k++) {
+          var dot = document.createElement('button');
+          dot.type = 'button';
+          dot.className = 'testimonials-slider__dot' + (k === 0 ? ' testimonials-slider__dot--active' : '');
+          dot.setAttribute('role', 'tab');
+          dot.setAttribute('aria-label', 'Go to testimonial ' + (k + 1) + ' of ' + N);
+          dot.setAttribute('aria-selected', k === 0 ? 'true' : 'false');
+          (function (targetRealIndex) {
+            dot.addEventListener('click', function () {
+              goToRealIndex(targetRealIndex);
+            });
+          })(k);
+          dotsWrap.appendChild(dot);
+        }
+      }
+
+      function getRealIndex(domIdx) {
+        return ((domIdx - CLONES) % N + N) % N;
+      }
+
+      function updateActiveStates() {
+        var activeRealIdx = getRealIndex(domIndex);
+
+        allCards.forEach(function (card, idx) {
+          if (idx === domIndex) {
+            card.classList.add('is-active');
+            card.setAttribute('aria-hidden', 'false');
+          } else {
+            card.classList.remove('is-active');
+            card.setAttribute('aria-hidden', 'true');
+          }
+        });
+
+        if (dotsWrap) {
+          var dots = dotsWrap.querySelectorAll('.testimonials-slider__dot');
+          dots.forEach(function (dot, idx) {
+            if (idx === activeRealIdx) {
+              dot.classList.add('testimonials-slider__dot--active');
+              dot.setAttribute('aria-selected', 'true');
+            } else {
+              dot.classList.remove('testimonials-slider__dot--active');
+              dot.setAttribute('aria-selected', 'false');
+            }
+          });
+        }
+      }
+
+      function getTranslateOffset(idx) {
+        var V = viewport.offsetWidth;
+        var card = allCards[idx] || allCards[CLONES];
+        var cw = card ? card.offsetWidth : 470;
+        var gap = window.innerWidth <= 680 ? 16 : 24;
+        return (V - cw) / 2 - idx * (cw + gap);
+      }
+
+      function handleLoopReset() {
+        if (domIndex >= CLONES + N) {
+          moveTo(domIndex - N, false);
+        } else if (domIndex < CLONES) {
+          moveTo(domIndex + N, false);
+        }
+      }
+
+      function moveTo(idx, animated) {
+        domIndex = idx;
+        clearTimeout(transitionSafetyTimer);
+
+        var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (animated && !prefersReduced) {
+          track.style.transition = 'transform 0.6s cubic-bezier(0.22, 1, 0.36, 1)';
+          isTransitioning = true;
+          // Safety timeout ensures isTransitioning is NEVER permanently stuck
+          transitionSafetyTimer = setTimeout(function () {
+            if (isTransitioning) {
+              isTransitioning = false;
+              handleLoopReset();
+            }
+          }, 700);
+        } else {
+          track.style.transition = 'none';
+          isTransitioning = false;
+        }
+
+        var offset = getTranslateOffset(domIndex);
+        track.style.transform = 'translateX(' + offset + 'px)';
+        updateActiveStates();
+      }
+
+      function goToRealIndex(realIdx) {
+        resetAutoplay();
+        moveTo(realIdx + CLONES, true);
+      }
+
+      function nextSlide() {
+        if (isTransitioning) return;
+        resetAutoplay();
+        moveTo(domIndex + 1, true);
+      }
+
+      function prevSlide() {
+        if (isTransitioning) return;
+        resetAutoplay();
+        moveTo(domIndex - 1, true);
+      }
+
+      // Seamless loop reset on transitionend
+      track.addEventListener('transitionend', function (e) {
+        if (e.target !== track) return;
+        clearTimeout(transitionSafetyTimer);
+        isTransitioning = false;
+        handleLoopReset();
+      });
+
+      // Side card click to navigate
+      allCards.forEach(function (card, idx) {
+        card.addEventListener('click', function () {
+          if (idx !== domIndex) {
+            resetAutoplay();
+            moveTo(idx, true);
+          }
+        });
+      });
+
+      // Navigation Buttons
+      if (nextBtn) {
+        nextBtn.addEventListener('click', function (e) {
+          e.preventDefault();
+          nextSlide();
+        });
+      }
+      if (prevBtn) {
+        prevBtn.addEventListener('click', function (e) {
+          e.preventDefault();
+          prevSlide();
+        });
+      }
+
+      // Autoplay with Pause on Hover / Focus / Inactivity
+      function startAutoplay() {
+        stopAutoplay();
+        autoplayTimer = setInterval(function () {
+          nextSlide();
+        }, AUTOPLAY_DELAY);
+      }
+
+      function stopAutoplay() {
+        if (autoplayTimer) {
+          clearInterval(autoplayTimer);
+          autoplayTimer = null;
+        }
+      }
+
+      function resetAutoplay() {
+        stopAutoplay();
+        startAutoplay();
+      }
+
+      slider.addEventListener('mouseenter', stopAutoplay);
+      slider.addEventListener('mouseleave', startAutoplay);
+      slider.addEventListener('focusin', stopAutoplay);
+      slider.addEventListener('focusout', startAutoplay);
+
+      // Visibility change (pause when tab hidden, resume when tab visible)
+      document.addEventListener('visibilitychange', function () {
+        if (document.hidden) {
+          stopAutoplay();
+        } else {
+          startAutoplay();
+        }
+      });
+
+      // Keyboard Navigation
+      slider.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowRight') {
+          nextSlide();
+        } else if (e.key === 'ArrowLeft') {
+          prevSlide();
+        }
+      });
+
+      // Touch / Swipe Navigation
+      var startX = 0;
+      var isSwiping = false;
+
+      slider.addEventListener('touchstart', function (e) {
+        if (e.touches && e.touches.length) {
+          startX = e.touches[0].clientX;
+          isSwiping = true;
+          stopAutoplay();
+        }
+      }, { passive: true });
+
+      slider.addEventListener('touchend', function (e) {
+        if (!isSwiping) return;
+        var endX = (e.changedTouches && e.changedTouches.length) ? e.changedTouches[0].clientX : startX;
+        var diff = startX - endX;
+        if (Math.abs(diff) > 40) {
+          if (diff > 0) {
+            nextSlide();
+          } else {
+            prevSlide();
+          }
+        }
+        isSwiping = false;
+        startAutoplay();
+      }, { passive: true });
+
+      // Resize observer / window resize
+      var resizeTimer;
+      window.addEventListener('resize', function () {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function () {
+          moveTo(domIndex, false);
+        }, 80);
+      });
+
+      // Layout ready alignment
+      setTimeout(function () {
+        moveTo(domIndex, false);
+      }, 100);
+
+      window.addEventListener('load', function () {
+        moveTo(domIndex, false);
+      });
+
+      // Initial layout setup
+      moveTo(domIndex, false);
+      startAutoplay();
+    });
+  }
+
+  /**
+   * Footer Social Media Icons Initialization
+   */
+  function initFooterSocialIcons() {
+    var config = window.AROVIA_SOCIAL_CONFIG || {
+      instagram: { name: 'Instagram', url: null, statusText: 'Coming Soon' },
+      youtube: { name: 'YouTube', url: null, statusText: 'Coming Soon' },
+      facebook: { name: 'Facebook', url: null, statusText: 'Coming Soon' }
+    };
+
+    var footerIcons = document.querySelectorAll('.footer-social-icon');
+    footerIcons.forEach(function (item) {
+      var platform = item.getAttribute('data-platform');
+      var pConfig = config[platform];
+      if (!pConfig) return;
+
+      if (pConfig.url) {
+        item.setAttribute('href', pConfig.url);
+        item.setAttribute('target', '_blank');
+        item.setAttribute('rel', 'noopener noreferrer');
+        item.removeAttribute('role');
+      } else {
+        item.setAttribute('href', '#');
+        item.setAttribute('role', 'button');
+      }
+
+      item.addEventListener('click', function (e) {
+        if (!pConfig.url) {
+          e.preventDefault();
+          var msg = pConfig.comingSoonMessage || ("Arovia's official " + pConfig.name + ' channel is coming soon. For care services, call our helpline.');
+          if (typeof announceToScreenReader === 'function') {
+            announceToScreenReader(msg);
+          }
+        }
+      });
+    });
+  }
+
   function initApp() {
     highlightActiveNav();
     initCopyPhoneButtons();
     initConnectDock();
+    initCareSituationNavigator();
     initScrollProgressLine();
+    initHeaderScrollState();
     initCinematicCta();
     initTypographyAnimations();
+    initHeroCarousel();
+    initTestimonialsSliders();
+    initFooterSocialIcons();
   }
 
   if (document.readyState === 'loading') {

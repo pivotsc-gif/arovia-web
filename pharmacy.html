@@ -7,7 +7,12 @@
   <meta name="description" content="Enquire with Arovia's pharmacy desk about medicines and healthcare supplies. Availability, prescription requirements, and applicable pricing are confirmed by phone.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600;1,700&family=Manrope:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400;1,9..40,500;1,9..40,600;1,9..40,700&display=swap" rel="stylesheet">
+    <!-- Favicon / Brand Monogram -->
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="shortcut icon" href="favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/pharmacy.css">
 </head>
@@ -18,9 +23,40 @@
   <!-- Top Scroll Progress Line (Subtle Brand Green Indicator — Ohana Reference) -->
   <div class="scroll-progress-line" id="scrollProgressLine" aria-hidden="true"></div>
 
-  <!-- Site Header (Coordinated 2-Row Sticky Header) -->
+  <!-- Dark Teal Contact Information Bar (Above Main Navigation Header) -->
+  <div class="topbar" aria-label="Official Contact Information">
+    <div class="container topbar__container">
+      <div class="topbar__left">
+        <a href="https://maps.app.goo.gl/LxDHu9jJ4c3jgWU56" target="_blank" rel="noopener noreferrer" class="topbar__item topbar__link topbar__item--address" aria-label="Open Arovia location on Google Maps: Shop No.26, Ground Floor, Annapurna Complex, Kakani Road, Guntur (opens in a new tab)" title="Open Arovia location on Google Maps (opens in a new tab)">
+          <svg class="topbar__icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+          <span class="topbar__address-text topbar__address-full">Shop No.26, Ground Floor, Annapurna Complex, Kakani Road, Guntur – 522 001, AP, India</span>
+          <span class="topbar__address-text topbar__address-compact">Shop No.26, Annapurna Complex, Kakani Rd, Guntur</span>
+        </a>
+      </div>
+      <div class="topbar__right">
+        <a href="tel:+919649648430" class="topbar__item topbar__link topbar__item--phone" aria-label="Telephone Arovia at +91 96496 48430">
+          <svg class="topbar__icon" viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true">
+            <path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 0 0-1.01.24l-2.2 2.2a15.053 15.053 0 0 1-6.59-6.59l2.2-2.21a.96.96 0 0 0 .25-1A11.36 11.36 0 0 1 8.5 3.93c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.55c0-.55-.45-1-.99-1z"/>
+          </svg>
+          <span>+91 96496 48430</span>
+        </a>
+        <span class="topbar__divider" aria-hidden="true">|</span>
+        <a href="mailto:arovia22@gmail.com" class="topbar__item topbar__link topbar__item--email" aria-label="Email Arovia at arovia22@gmail.com">
+          <svg class="topbar__icon" viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true">
+            <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+          </svg>
+          <span>arovia22@gmail.com</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- White Main Navigation Header (Sticky on Scroll) -->
   <header class="site-header" role="banner">
-    <!-- Row 1: Main Navigation Header -->
+    <!-- Main Navigation Header -->
     <div class="site-header__main">
       <div class="container site-header__wrapper">
         <a href="index.html" class="brand-link" aria-label="Arovia Healthcare Homepage">
@@ -40,6 +76,7 @@
             <li><a href="medical-equipment.html" class="main-nav__link">Medical Equipment</a></li>
             <li><a href="pharmacy.html" class="main-nav__link main-nav__link--active" aria-current="page">Pharmacy</a></li>
             <li><a href="lab-tests.html" class="main-nav__link">Lab Tests</a></li>
+            <li><a href="digital-health.html" class="main-nav__link">Digital Health</a></li>
             <li><a href="contact.html" class="main-nav__link">Contact</a></li>
           </ul>
         </nav>
@@ -68,37 +105,6 @@
         </div>
       </div>
     </div>
-
-    <!-- Row 2: Contact Information Strip -->
-    <div class="topbar" aria-label="Official Contact Information">
-      <div class="container topbar__container">
-        <div class="topbar__left">
-          <a href="https://maps.app.goo.gl/LxDHu9jJ4c3jgWU56" target="_blank" rel="noopener noreferrer" class="topbar__item topbar__link topbar__item--address" aria-label="Open Arovia location on Google Maps: Shop No.26, Ground Floor, Annapurna Complex, Kakani Road, Guntur (opens in a new tab)" title="Open Arovia location on Google Maps (opens in a new tab)">
-            <svg class="topbar__icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-              <circle cx="12" cy="10" r="3"></circle>
-            </svg>
-            <span class="topbar__address-text topbar__address-full">Shop No.26, Ground Floor, Annapurna Complex, Kakani Road, Guntur – 522 001, AP, India</span>
-            <span class="topbar__address-text topbar__address-compact">Shop No.26, Annapurna Complex, Kakani Rd, Guntur</span>
-          </a>
-        </div>
-        <div class="topbar__right">
-          <a href="tel:+919649648430" class="topbar__item topbar__link topbar__item--phone" aria-label="Telephone Arovia at +91 96496 48430">
-            <svg class="topbar__icon" viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true">
-              <path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 0 0-1.01.24l-2.2 2.2a15.053 15.053 0 0 1-6.59-6.59l2.2-2.21a.96.96 0 0 0 .25-1A11.36 11.36 0 0 1 8.5 3.93c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.55c0-.55-.45-1-.99-1z"/>
-            </svg>
-            <span>+91 96496 48430</span>
-          </a>
-          <span class="topbar__divider" aria-hidden="true">|</span>
-          <a href="mailto:arovia22@gmail.com" class="topbar__item topbar__link topbar__item--email" aria-label="Email Arovia at arovia22@gmail.com">
-            <svg class="topbar__icon" viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true">
-              <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
-            </svg>
-            <span>arovia22@gmail.com</span>
-          </a>
-        </div>
-      </div>
-    </div>
   </header>
 
   <!-- Mobile Navigation Drawer -->
@@ -120,6 +126,7 @@
       <a href="medical-equipment.html" class="mobile-drawer__link">Medical Equipment</a>
       <a href="pharmacy.html" class="mobile-drawer__link mobile-drawer__link--active" aria-current="page">Pharmacy</a>
       <a href="lab-tests.html" class="mobile-drawer__link">Lab Tests</a>
+      <a href="digital-health.html" class="mobile-drawer__link">Digital Health</a>
       <a href="contact.html" class="mobile-drawer__link">Contact</a>
     </nav>
     <div class="mobile-drawer__footer">
@@ -137,31 +144,26 @@
   <!-- Main Content Area -->
   <main id="main-content">
     
-    <!-- Page Introduction & Educational Scope with Molecular Lattice Theme -->
-    <section class="page-header page-header--enhanced page-header--grid bg-artwork-pharmacy pharmacy-hero" style="padding-bottom: var(--spacing-12);">
-      <div class="container page-header__container">
-        <div class="pharmacy-hero__copy pharmacy-reveal pharmacy-reveal--now">
-          <div class="page-header__breadcrumb">
-            <a href="index.html">Home</a>
-            <span class="page-header__breadcrumb-separator">/</span>
-            <span>Pharmacy</span>
-          </div>
-          <div class="page-header__badge">
-            <span>Pharmacy Coordination &amp; Dispensation</span>
-          </div>
-          <h1 class="page-header__title">Pharmacy Services &amp; Medicine Information</h1>
-          <p class="page-header__subtitle">
+    <!-- 6.1 Pharmacy Landing Page Hero — Full-Width Photographic Background (Matching Home Care Visual Treatment) -->
+    <section class="hero hero--indimac hero--pharmacy">
+      <!-- Background Layers: Sharp Photo + Semi-Transparent Gradient Overlay -->
+      <div class="hero__bg" aria-hidden="true">
+        <div class="hero__bg-image"></div>
+        <div class="hero__bg-overlay"></div>
+      </div>
+
+      <!-- Foreground Content Layer -->
+      <div class="container hero__container">
+        <div class="hero__content">
+          <h1 class="hero__title">
+            Pharmacy Services &amp; Medicine Information
+          </h1>
+          <p class="hero__intro">
             Call Arovia's pharmacy desk to enquire about medicines and healthcare supplies for ongoing treatment, recovery after a procedure, and day-to-day care. Availability, prescription requirements, and the applicable price are confirmed with you on the call.
           </p>
-          <p style="font-size: var(--font-size-xs); color: var(--color-text-muted); margin-top: var(--spacing-3);">
+          <p class="hero__note">
             * Direct phone consultation only. Prescription medicines are supplied only after the required prescription is checked, in line with statutory drug regulations.
           </p>
-        </div>
-
-        <div class="hero-showcase pharmacy-reveal pharmacy-reveal--now">
-          <div class="hero-showcase__media">
-            <img src="assets/images/pharmacy_consultation.jpg" alt="Arovia pharmacist providing professional consultation on verified prescription medications to patient" class="hero-showcase__img" width="700" height="420">
-          </div>
         </div>
       </div>
     </section>
@@ -216,6 +218,18 @@
             <h3 class="info-card__title">If something does not look right</h3>
             <p class="info-card__text">
               If a product appears damaged, incorrect, or questionable, do not use it. Call the pharmacy desk with the product details so the concern can be clarified. Unclear clinical instructions should go back to the treating healthcare professional.
+            </p>
+          </div>
+          <div class="info-card pharmacy-reveal">
+            <h3 class="info-card__title">Storage conditions and cold-chain integrity</h3>
+            <p class="info-card__text">
+              Medicines requiring temperature-controlled or refrigerated storage—such as insulins and biological preparations—are identified so appropriate handling guidance is confirmed before collection or supply arrangements proceed.
+            </p>
+          </div>
+          <div class="info-card pharmacy-reveal">
+            <h3 class="info-card__title">Prescriber instructions and label clarity</h3>
+            <p class="info-card__text">
+              Prescription directions, dosage frequency, and cautionary label notes are checked for completeness. Any ambiguity in medical instructions is directed back to the treating physician rather than assumed or substituted.
             </p>
           </div>
         </div>
@@ -273,6 +287,26 @@
             <h3 class="info-card__title">Supportive Wellness &amp; First Aid</h3>
             <p class="info-card__text">
               General healthcare and first-aid items, such as oral rehydration salts, antiseptic solutions, and simple bedside supplies. Not every item is held at all times, and this category is not a prompt to self-medicate. For a new or worsening symptom, speak to a healthcare professional.
+            </p>
+          </div>
+
+          <div class="info-card pharmacy-reveal">
+            <div class="info-card__icon">
+              <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            </div>
+            <h3 class="info-card__title">Pediatric &amp; Family Care</h3>
+            <p class="info-card__text">
+              Enquiries for doctor-prescribed pediatric drops, oral suspensions, calibrated measuring devices, and specialized formulations for infants and children. Weight-based dosages and precise schedules must always be confirmed directly with your treating pediatrician.
+            </p>
+          </div>
+
+          <div class="info-card pharmacy-reveal">
+            <div class="info-card__icon">
+              <svg viewBox="0 0 24 24"><path d="M6 3h12v2H6zm11 3H7c-1.1 0-2 .9-2 2v11c0 1.66 1.34 3 3 3h8c1.66 0 3-1.34 3-3V8c0-1.1-.9-2-2-2zm-1 13H8c-.55 0-1-.45-1-1V8h10v10c0 .55-.45 1-1 1zm-4-8h-2v2H8v2h2v2h2v-2h2v-2h-2z"/></svg>
+            </div>
+            <h3 class="info-card__title">Nutritional Feeds &amp; Medical Supplements</h3>
+            <p class="info-card__text">
+              Enquiries for prescribed oral nutritional formulas, dietary management feeds for elderly or recovering patients, and therapeutic supplements supporting clinical convalescence. Formulation availability and pack sizes are confirmed on the call.
             </p>
           </div>
         </div>
@@ -423,6 +457,18 @@
             <h3 class="info-card__title">If the item is unavailable</h3>
             <p class="info-card__text">
               The desk will say so. Do not change a prescribed medicine, dose, or treatment on your own. Speak to the treating prescriber before requesting something different.
+            </p>
+          </div>
+          <div class="info-card pharmacy-reveal">
+            <h3 class="info-card__title">Procurement timelines for specialized items</h3>
+            <p class="info-card__text">
+              For less common medications, specialized strengths, or specific brand formulations, the coordinator verifies the realistic sourcing window during your call so treatment schedules can be coordinated without unnecessary gaps.
+            </p>
+          </div>
+          <div class="info-card pharmacy-reveal">
+            <h3 class="info-card__title">Direct verbal confirmation before supply</h3>
+            <p class="info-card__text">
+              No order is finalized or dispatched until prescription validity, exact packaging quantities, pricing, and collection or delivery arrangements are mutually confirmed during your telephone consultation with the desk.
             </p>
           </div>
         </div>
@@ -613,6 +659,17 @@
           <p class="footer-col__text">
             Arovia delivers professional healthcare services designed to make patient care simpler and more accessible. From personal home nursing to medical equipment and pharmacy dispensation.
           </p>
+          <div class="footer-social-dock" role="group" aria-label="Arovia Official Social Media Channels">
+            <a href="#" class="footer-social-icon footer-social-icon--instagram" data-platform="instagram" aria-label="Arovia on Instagram" title="Arovia on Instagram" role="button">
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </a>
+            <a href="#" class="footer-social-icon footer-social-icon--facebook" data-platform="facebook" aria-label="Arovia on Facebook" title="Arovia on Facebook" role="button">
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            </a>
+            <a href="#" class="footer-social-icon footer-social-icon--youtube" data-platform="youtube" aria-label="Arovia on YouTube" title="Arovia on YouTube" role="button">
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            </a>
+          </div>
         </div>
 
         <div>
@@ -623,6 +680,7 @@
             <li><a href="medical-equipment.html" class="footer-nav__link">Medical Equipment</a></li>
             <li><a href="pharmacy.html" class="footer-nav__link">Pharmacy</a></li>
             <li><a href="lab-tests.html" class="footer-nav__link">Lab Tests</a></li>
+            <li><a href="digital-health.html" class="footer-nav__link">Digital Health</a></li>
           </ul>
         </div>
 
@@ -663,7 +721,7 @@
 
       <div class="site-footer__bottom">
         <div>&copy; 2026 Arovia Healthcare. All rights reserved. Direct phone service only — No online shopping cart or checkout.</div>
-        <div>Healthcare Support, Made Easier</div>
+        <div class="footer-credit">Made with <span class="footer-credit__heart" aria-label="love">💖</span> by <a href="https://pivotsoftwareconsultants.com/" target="_blank" rel="noopener noreferrer" class="footer-credit__link">PIVOT SOFT</a></div>
       </div>
     </div>
   </footer>
