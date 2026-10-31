@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" width="1440" height="900">
+  <defs>
+    <linearGradient id="dhBgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f8fcf9" />
+      <stop offset="50%" stop-color="#fbfdfc" />
+      <stop offset="100%" stop-color="#f5faf7" />
+    </linearGradient>
+    
+    <radialGradient id="dhOrganicBlob1" cx="20%" cy="20%" r="55%">
+      <stop offset="0%" stop-color="#e3f2ec" stop-opacity="0.75" />
+      <stop offset="60%" stop-color="#edf6f2" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#f8fcf9" stop-opacity="0" />
+    </radialGradient>
+
+    <radialGradient id="dhOrganicBlob2" cx="85%" cy="85%" r="50%">
+      <stop offset="0%" stop-color="#def0e8" stop-opacity="0.85" />
+      <stop offset="55%" stop-color="#eaf5f0" stop-opacity="0.5" />
+      <stop offset="100%" stop-color="#fbfdfc" stop-opacity="0" />
+    </radialGradient>
+
+    <radialGradient id="dhOrganicBlob3" cx="90%" cy="15%" r="40%">
+      <stop offset="0%" stop-color="#e8f4ef" stop-opacity="0.6" />
+      <stop offset="100%" stop-color="#fbfdfc" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <!-- Base background fill -->
+  <rect width="100%" height="100%" fill="url(#dhBgGrad)" />
+
+  <!-- Soft organic curved blobs -->
+  <path d="M-80,-60 C140,-20 220,160 120,320 C20,480 -80,420 -120,300 Z" fill="url(#dhOrganicBlob1)" />
+  <path d="M-60,350 C80,430 90,660 -30,800 C-120,860 -150,600 -120,450 Z" fill="#edf6f2" opacity="0.6" />
+  <path d="M850,520 C1020,460 1220,530 1440,480 L1440,940 L820,940 C760,820 780,660 850,520 Z" fill="url(#dhOrganicBlob2)" />
+  <path d="M1150,-60 C1200,80 1300,160 1460,180 L1460,-60 Z" fill="url(#dhOrganicBlob3)" />
+
+  <!-- Delicate curved lines (Thin teal accents) -->
+  <path d="M-60,60 C160,80 260,240 190,420 C130,550 30,620 -50,660" fill="none" stroke="#008794" stroke-width="1.3" stroke-opacity="0.22" />
+  <path d="M-40,130 C120,145 200,260 150,390 C110,490 30,550 -40,580" fill="none" stroke="#008794" stroke-width="0.9" stroke-opacity="0.15" />
+  <path d="M-50,730 C90,710 170,810 130,960" fill="none" stroke="#008794" stroke-width="1.1" stroke-opacity="0.18" />
+  <path d="M1480,120 C1310,220 1260,460 1320,700 C1360,820 1420,880 1490,920" fill="none" stroke="#008794" stroke-width="1.3" stroke-opacity="0.24" />
+  <path d="M1460,190 C1340,280 1300,480 1350,680" fill="none" stroke="#008794" stroke-width="0.9" stroke-opacity="0.14" />
+
+  <!-- Left-side soft botanical silhouette -->
+  <g opacity="0.45">
+    <path d="M-20,490 C35,470 75,430 95,385" fill="none" stroke="#8cb0a2" stroke-width="2" stroke-linecap="round" />
+    <path d="M95,385 C120,345 130,300 122,285 C108,315 95,355 95,385 Z" fill="#9fc1b4" />
+    <path d="M65,435 C90,415 125,400 135,405 C115,425 85,440 65,435 Z" fill="#b4d5c8" />
+    <path d="M35,465 C25,435 20,395 30,390 C35,415 42,450 35,465 Z" fill="#96bba9" />
+  </g>
+
+  <!-- Bottom-Right signature botanical eucalyptus cluster (framing corner) -->
+  <g>
+    <!-- Stems -->
+    <path d="M1450,880 C1370,830 1285,745 1220,645 C1185,590 1170,525 1165,470" fill="none" stroke="#71988a" stroke-width="2.6" stroke-linecap="round" stroke-opacity="0.65" />
+    <path d="M1290,755 C1325,685 1340,600 1325,525" fill="none" stroke="#80a597" stroke-width="2" stroke-linecap="round" stroke-opacity="0.6" />
+    <path d="M1365,815 C1410,760 1430,695 1415,625" fill="none" stroke="#8eaeb0" stroke-width="1.8" stroke-linecap="round" stroke-opacity="0.55" />
+
+    <!-- Eucalyptus Leaves (Main stem) -->
+    <!-- Top terminal leaf -->
+    <path d="M1165,470 C1150,405 1105,350 1090,340 C1112,385 1142,445 1165,470 Z" fill="#7fa698" fill-opacity="0.8" />
+    <!-- Opposite top leaf -->
+    <path d="M1175,505 C1212,450 1238,395 1230,380 C1212,420 1190,475 1175,505 Z" fill="#93baa9" fill-opacity="0.85" />
+    <!-- Mid-left leaf -->
+    <path d="M1218,642 C1160,600 1095,570 1065,570 C1108,608 1172,638 1218,642 Z" fill="#729b8c" fill-opacity="0.75" />
+    <!-- Mid-right leaf -->
+    <path d="M1240,668 C1295,625 1350,595 1375,600 C1340,632 1280,658 1240,668 Z" fill="#9ec4b5" fill-opacity="0.88" />
+    
+    <!-- Secondary stem leaves -->
+    <!-- Upper leaf -->
+    <path d="M1325,525 C1330,460 1358,405 1370,395 C1360,438 1342,492 1325,525 Z" fill="#88af9f" fill-opacity="0.8" />
+    <!-- Left branch leaf -->
+    <path d="M1312,610 C1258,568 1225,515 1225,505 C1248,538 1285,585 1312,610 Z" fill="#aad0c1" fill-opacity="0.85" />
+    <!-- Right branch leaf -->
+    <path d="M1330,625 C1385,585 1435,555 1455,560 C1425,590 1375,615 1330,625 Z" fill="#91b8a8" fill-opacity="0.75" />
+
+    <!-- Tertiary stem leaves (lower) -->
+    <path d="M1415,625 C1440,560 1475,515 1490,515 C1475,560 1442,602 1415,625 Z" fill="#84ac9c" fill-opacity="0.7" />
+    <path d="M1385,730 C1438,675 1485,635 1500,640 C1472,678 1425,715 1385,730 Z" fill="#9ec2b3" fill-opacity="0.8" />
+    <path d="M1365,815 C1418,755 1462,710 1478,712 C1450,755 1402,798 1365,815 Z" fill="#759e8f" fill-opacity="0.7" />
+  </g>
+</svg>

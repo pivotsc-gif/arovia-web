@@ -86,12 +86,11 @@
           <ul class="main-nav__list">
             <li><a href="index.html" class="main-nav__link">Home</a></li>
             <li><a href="home-care.html" class="main-nav__link">Home Care</a></li>
-            <li><a href="ambulance.html" class="main-nav__link">Ambulance</a></li>
-            <li><a href="medical-equipment.html" class="main-nav__link main-nav__link--active"
-                aria-current="page">Medical Equipment</a></li>
-            <li><a href="pharmacy.html" class="main-nav__link">Pharmacy</a></li>
             <li><a href="lab-tests.html" class="main-nav__link">Lab Tests</a></li>
+            <li><a href="pharmacy.html" class="main-nav__link">Pharmacy</a></li>
+            <li><a href="medical-equipment.html" class="main-nav__link main-nav__link--active" aria-current="page">Medical Equipment</a></li>
             <li><a href="digital-health.html" class="main-nav__link">Digital Health</a></li>
+            <li><a href="ambulance.html" class="main-nav__link">Ambulance</a></li>
             <li><a href="contact.html" class="main-nav__link">Contact</a></li>
           </ul>
         </nav>
@@ -158,12 +157,11 @@
     <nav class="mobile-drawer__nav">
       <a href="index.html" class="mobile-drawer__link">Home</a>
       <a href="home-care.html" class="mobile-drawer__link">Home Care</a>
-      <a href="ambulance.html" class="mobile-drawer__link">Ambulance</a>
-      <a href="medical-equipment.html" class="mobile-drawer__link mobile-drawer__link--active"
-        aria-current="page">Medical Equipment</a>
-      <a href="pharmacy.html" class="mobile-drawer__link">Pharmacy</a>
       <a href="lab-tests.html" class="mobile-drawer__link">Lab Tests</a>
+      <a href="pharmacy.html" class="mobile-drawer__link">Pharmacy</a>
+      <a href="medical-equipment.html" class="mobile-drawer__link mobile-drawer__link--active" aria-current="page">Medical Equipment</a>
       <a href="digital-health.html" class="mobile-drawer__link">Digital Health</a>
+      <a href="ambulance.html" class="mobile-drawer__link">Ambulance</a>
       <a href="contact.html" class="mobile-drawer__link">Contact</a>
     </nav>
     <div class="mobile-drawer__footer">
@@ -268,10 +266,10 @@
     <section class="section">
       <div class="container">
 
-        <!-- Filter & Search Toolbar -->
+        <!-- Filter & Search Toolbar - Compact Dropdown Design (Reference Image 1) -->
         <div class="catalog-toolbar">
           <div class="catalog-search-wrap">
-            <svg class="catalog-search-icon" viewBox="0 0 24 24">
+            <svg class="catalog-search-icon" viewBox="0 0 24 24" aria-hidden="true">
               <path
                 d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
             </svg>
@@ -280,29 +278,43 @@
               aria-label="Search medical equipment">
           </div>
 
-          <div class="catalog-categories" role="tablist" aria-label="Equipment Categories">
-            <button type="button" class="category-tab category-tab--active" data-cat="all" role="tab"
-              aria-selected="true">
-              All Equipment (28)
+          <div class="catalog-divider" aria-hidden="true"></div>
+
+          <div class="catalog-dropdown-wrap" id="categoryDropdownWrap">
+            <button type="button" class="catalog-dropdown-btn" id="categoryDropdownBtn"
+              aria-expanded="false" aria-haspopup="listbox" aria-label="Filter by category">
+              <span class="catalog-dropdown-label" id="selectedCategoryLabel">All Categories</span>
+              <svg class="catalog-dropdown-chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 10 13 14 9"></polyline>
+              </svg>
             </button>
-            <button type="button" class="category-tab" data-cat="Hospital Beds & Stretchers" role="tab"
-              aria-selected="false">
-              Hospital Beds & Stretchers (5)
-            </button>
-            <button type="button" class="category-tab" data-cat="OT & Ward Furniture" role="tab" aria-selected="false">
-              OT & Ward Furniture (12)
-            </button>
-            <button type="button" class="category-tab" data-cat="Patient Mobility" role="tab" aria-selected="false">
-              Patient Mobility (2)
-            </button>
-            <button type="button" class="category-tab" data-cat="Diagnostic & Monitoring Devices" role="tab"
-              aria-selected="false">
-              Diagnostic & Monitoring (7)
-            </button>
-            <button type="button" class="category-tab" data-cat="Critical Care & Treatment" role="tab"
-              aria-selected="false">
-              Critical Care & Treatment (2)
-            </button>
+
+            <div class="catalog-dropdown-menu" id="categoryDropdownMenu" role="listbox" aria-label="Equipment Categories">
+              <button type="button" class="catalog-dropdown-item category-tab category-tab--active" data-cat="all" role="option" aria-selected="true">
+                <span class="catalog-item-text">All Categories</span>
+                <span class="catalog-item-count">(28)</span>
+              </button>
+              <button type="button" class="catalog-dropdown-item category-tab" data-cat="Hospital Beds & Stretchers" role="option" aria-selected="false">
+                <span class="catalog-item-text">Hospital Beds & Stretchers</span>
+                <span class="catalog-item-count">(5)</span>
+              </button>
+              <button type="button" class="catalog-dropdown-item category-tab" data-cat="OT & Ward Furniture" role="option" aria-selected="false">
+                <span class="catalog-item-text">OT & Ward Furniture</span>
+                <span class="catalog-item-count">(12)</span>
+              </button>
+              <button type="button" class="catalog-dropdown-item category-tab" data-cat="Patient Mobility" role="option" aria-selected="false">
+                <span class="catalog-item-text">Patient Mobility</span>
+                <span class="catalog-item-count">(2)</span>
+              </button>
+              <button type="button" class="catalog-dropdown-item category-tab" data-cat="Diagnostic & Monitoring Devices" role="option" aria-selected="false">
+                <span class="catalog-item-text">Diagnostic & Monitoring</span>
+                <span class="catalog-item-count">(7)</span>
+              </button>
+              <button type="button" class="catalog-dropdown-item category-tab" data-cat="Critical Care & Treatment" role="option" aria-selected="false">
+                <span class="catalog-item-text">Critical Care & Treatment</span>
+                <span class="catalog-item-count">(2)</span>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -2364,11 +2376,12 @@
       let visibleCount = 0;
 
       cards.forEach(card => {
-        const cardCat = card.getAttribute('data-category');
-        const cardModel = card.getAttribute('data-model');
-        const cardName = card.getAttribute('data-name');
+        const cardCat = card.getAttribute('data-category') || '';
+        const cardModel = (card.getAttribute('data-model') || '').toLowerCase();
+        const cardName = (card.getAttribute('data-name') || '').toLowerCase();
 
-        const matchesCat = (currentCategory === 'all' || cardCat === currentCategory);
+        const normalizedCardCat = cardCat.replace(/&amp;/g, '&');
+        const matchesCat = (currentCategory === 'all' || cardCat === currentCategory || normalizedCardCat === currentCategory);
         const matchesQuery = (!searchQuery || cardModel.includes(searchQuery) || cardName.includes(searchQuery));
 
         if (matchesCat && matchesQuery) {
@@ -2383,7 +2396,34 @@
       document.getElementById('noResults').style.display = visibleCount === 0 ? 'block' : 'none';
     }
 
-    // Category Tabs click handling
+    // Category Dropdown & Tabs handling
+    const dropdownWrap = document.getElementById('categoryDropdownWrap');
+    const dropdownBtn = document.getElementById('categoryDropdownBtn');
+    const selectedCategoryLabel = document.getElementById('selectedCategoryLabel');
+
+    if (dropdownBtn && dropdownWrap) {
+      dropdownBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = dropdownWrap.classList.toggle('is-open');
+        dropdownBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!dropdownWrap.contains(e.target)) {
+          dropdownWrap.classList.remove('is-open');
+          dropdownBtn.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && dropdownWrap.classList.contains('is-open')) {
+          dropdownWrap.classList.remove('is-open');
+          dropdownBtn.setAttribute('aria-expanded', 'false');
+          dropdownBtn.focus();
+        }
+      });
+    }
+
     document.querySelectorAll('.category-tab').forEach(tab => {
       tab.addEventListener('click', () => {
         document.querySelectorAll('.category-tab').forEach(t => {
@@ -2393,6 +2433,17 @@
         tab.classList.add('category-tab--active');
         tab.setAttribute('aria-selected', 'true');
         currentCategory = tab.getAttribute('data-cat');
+
+        if (selectedCategoryLabel) {
+          const itemText = tab.querySelector('.catalog-item-text');
+          selectedCategoryLabel.textContent = itemText ? itemText.textContent : (currentCategory === 'all' ? 'All Categories' : currentCategory);
+        }
+
+        if (dropdownWrap) {
+          dropdownWrap.classList.remove('is-open');
+          if (dropdownBtn) dropdownBtn.setAttribute('aria-expanded', 'false');
+        }
+
         filterProducts();
       });
     });

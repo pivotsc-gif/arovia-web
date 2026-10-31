@@ -4203,105 +4203,250 @@ ul, ol {
    MODULE 5: MEDICAL EQUIPMENT CATALOG & MODAL STYLES
    ========================================================================== */
 
-/* Search & Filter Toolbar */
+/* Search & Filter Toolbar - Compact Dropdown Design (Reference Image 1) */
 .catalog-toolbar {
+  display: flex;
+  align-items: center;
   background-color: var(--color-white);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-6);
+  border-radius: var(--radius-pill);
+  padding: 6px 14px 6px 20px;
   margin-bottom: var(--spacing-8);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 2px 10px rgba(0, 86, 98, 0.05);
+  position: relative;
+  z-index: 50;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
-@media (max-width: 600px) {
-  .catalog-toolbar {
-    padding: var(--spacing-4);
-    margin-bottom: var(--spacing-6);
-  }
+.catalog-toolbar:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 18px rgba(0, 86, 98, 0.12), 0 0 0 3px rgba(0, 86, 98, 0.08);
 }
 
 .catalog-search-wrap {
   position: relative;
-  margin-bottom: var(--spacing-5);
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  margin-bottom: 0;
 }
 
 .catalog-search-icon {
-  position: absolute;
-  left: 16px;
-  top: 50%;
-  transform: translateY(-50%);
+  position: static;
+  transform: none;
   width: 20px;
   height: 20px;
+  min-width: 20px;
   fill: var(--color-text-muted);
+  margin-right: 12px;
+  flex-shrink: 0;
   pointer-events: none;
 }
 
 .catalog-search-input {
   width: 100%;
-  padding: 14px 16px 14px 48px;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  border: none;
+  background: transparent;
+  padding: 12px 0;
   font-family: inherit;
   font-size: var(--font-size-base);
   color: var(--color-dark);
-  background-color: var(--color-bg);
-  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+  outline: none;
+  box-shadow: none;
+}
+
+.catalog-search-input::placeholder {
+  color: var(--color-text-muted);
+  opacity: 0.85;
 }
 
 .catalog-search-input:focus {
   outline: none;
-  border-color: var(--color-primary);
-  background-color: var(--color-white);
-  box-shadow: 0 0 0 3px rgba(0, 86, 98, 0.12);
+  border: none;
+  box-shadow: none;
+  background: transparent;
 }
 
-.catalog-categories {
-  display: flex;
-  gap: var(--spacing-2);
-  flex-wrap: wrap;
+/* Subtle Vertical Divider */
+.catalog-divider {
+  width: 1px;
+  height: 26px;
+  background-color: var(--color-border);
+  margin: 0 16px;
+  flex-shrink: 0;
+}
+
+/* Category Dropdown Container */
+.catalog-dropdown-wrap {
+  position: relative;
+  flex: 0 0 auto;
+  z-index: 60;
+}
+
+/* Dropdown Toggle Button */
+.catalog-dropdown-btn {
+  display: inline-flex;
   align-items: center;
-}
-
-.category-tab {
-  padding: 8px 16px;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  padding: 8px 10px;
   border-radius: var(--radius-pill);
-  border: 1px solid var(--color-border);
-  background-color: var(--color-bg);
-  color: var(--color-text);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
   cursor: pointer;
-  transition: all var(--transition-fast);
   font-family: inherit;
-  min-height: 36px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--color-text);
+  white-space: nowrap;
+  user-select: none;
+  transition: color var(--transition-fast), background-color var(--transition-fast);
 }
 
-@media (max-width: 480px) {
-  .catalog-search-input {
-    padding: 12px 14px 12px 42px;
-    font-size: var(--font-size-sm);
-  }
-  .catalog-search-icon {
-    left: 12px;
-    width: 18px;
-    height: 18px;
-  }
-  .category-tab {
-    padding: 6px 12px;
-    font-size: 11px;
-    min-height: 34px;
-  }
+.catalog-dropdown-btn:hover {
+  color: var(--color-primary);
+  background-color: rgba(0, 86, 98, 0.04);
 }
 
-.category-tab:hover {
-  border-color: var(--color-primary);
+.catalog-dropdown-label {
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.catalog-dropdown-chevron {
+  width: 16px;
+  height: 16px;
+  color: var(--color-text-muted);
+  transition: transform 0.25s ease, color var(--transition-fast);
+}
+
+.catalog-dropdown-btn:hover .catalog-dropdown-chevron {
   color: var(--color-primary);
 }
 
-.category-tab--active {
-  background-color: var(--color-primary);
-  color: var(--color-white);
-  border-color: var(--color-primary);
+.catalog-dropdown-wrap.is-open .catalog-dropdown-chevron {
+  transform: rotate(180deg);
+  color: var(--color-primary);
+}
+
+/* Popover Dropdown Menu */
+.catalog-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  min-width: 270px;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 12px 32px rgba(0, 48, 56, 0.16);
+  padding: 6px;
+  z-index: 999;
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+  animation: catalogDropdownFade 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  max-height: 420px;
+  overflow-y: auto;
+}
+
+@keyframes catalogDropdownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.catalog-dropdown-wrap.is-open .catalog-dropdown-menu {
+  display: flex;
+}
+
+/* Dropdown Menu Item (reusing category-tab) */
+.catalog-dropdown-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 9px 14px;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm, 6px);
+  font-family: inherit;
+  font-size: 0.9rem;
+  color: var(--color-text);
+  cursor: pointer;
+  text-align: left;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+  min-height: auto;
+}
+
+.catalog-dropdown-item:hover {
+  background-color: #f0f7f9;
+  color: var(--color-primary);
+}
+
+.catalog-dropdown-item.category-tab--active {
+  background-color: var(--color-primary-light, #e6f4f6);
+  color: var(--color-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+.catalog-item-text {
+  flex: 1 1 auto;
+}
+
+.catalog-item-count {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-left: 12px;
+  font-weight: 500;
+}
+
+.catalog-dropdown-item.category-tab--active .catalog-item-count {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 768px) {
+  .catalog-toolbar {
+    padding: 4px 10px 4px 16px;
+    margin-bottom: var(--spacing-6);
+  }
+  .catalog-search-icon {
+    margin-right: 8px;
+    width: 18px;
+    height: 18px;
+  }
+  .catalog-search-input {
+    font-size: var(--font-size-sm);
+  }
+  .catalog-divider {
+    margin: 0 10px;
+    height: 22px;
+  }
+  .catalog-dropdown-btn {
+    font-size: 0.88rem;
+    padding: 6px 8px;
+  }
+}
+
+@media (max-width: 580px) {
+  .catalog-dropdown-label {
+    max-width: 125px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .catalog-dropdown-menu {
+    right: -10px;
+    left: auto;
+    width: calc(100vw - 48px);
+    max-width: 320px;
+  }
 }
 
 .category-tab--active:hover {

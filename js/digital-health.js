@@ -147,8 +147,8 @@ document.addEventListener('DOMContentLoaded', function () {
       title: 'Build Your Online Presence & Portals',
       tagline: 'Websites, Patient Portals & Digital Front Doors',
       desc: 'Websites and patient self-service portals that explain clinical capabilities with absolute clarity, build patient trust, and convert visitors into confirmed appointments.',
-      image: 'assets/images/digital_hero.png',
-      imageAlt: 'Arovia doctor holding digital healthcare tablet with patient portals and clinical analytics interface',
+      image: 'assets/images/dh_sol_websites.jpg',
+      imageAlt: 'Arovia digital healthcare laptop interface displaying patient portal and teleconsultation scheduling',
       iconSvg: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>',
       coversTitle: 'WHAT THIS SOLUTION COVERS',
       covers: [
@@ -172,8 +172,8 @@ document.addEventListener('DOMContentLoaded', function () {
       title: 'Create Mobile Apps for Care & Operations',
       tagline: 'iOS & Android Apps for Patients & Clinicians',
       desc: 'High-performance native and cross-platform apps built specifically for mobile jobs: daily patient vitals tracking, medication reminders, teleconsultations, and bedside doctor rounds.',
-      image: 'assets/images/nurse_clinical.jpg',
-      imageAlt: 'Clinical healthcare specialist using mobile clinical applications and bedside monitoring tools',
+      image: 'assets/images/dh_sol_mobile_apps.jpg',
+      imageAlt: 'Doctor holding smartphone with clinical vitals monitoring and healthcare operations mobile app',
       iconSvg: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"></rect><path d="M12 18h.01"></path></svg>',
       coversTitle: 'WHAT THIS SOLUTION COVERS',
       covers: [
@@ -197,8 +197,8 @@ document.addEventListener('DOMContentLoaded', function () {
       title: 'Connect Your Systems with Integrated Platforms',
       tagline: 'Centralized Patient Management & Multi-Department EHR',
       desc: 'Eliminate dangerous handoff gaps and duplicate clerical work. Connect registration, clinical charting, laboratory diagnostics, pharmacy dispensing, and billing into one unified database.',
-      image: 'assets/images/pharmacy_consultation.jpg',
-      imageAlt: 'Clinical specialist managing multi-department electronic health records and pharmaceutical system workflows',
+      image: 'assets/images/dh_sol_platforms.jpg',
+      imageAlt: 'Healthcare team collaborating at modern workstation with integrated EHR and multi-department analytics',
       iconSvg: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>',
       coversTitle: 'WHAT THIS SOLUTION COVERS',
       covers: [
@@ -222,8 +222,8 @@ document.addEventListener('DOMContentLoaded', function () {
       title: 'Custom Software for Specific Clinical Needs',
       tagline: 'Tailored Systems When Off-the-Shelf Tools Fall Short',
       desc: 'When standard software cannot accommodate your laboratory analyzers, equipment tracking, or unique specialty care pathways, we engineer custom software that follows your clinical procedures.',
-      image: 'assets/images/bento_equipment.jpg',
-      imageAlt: 'High-precision digital patient monitoring hardware and custom healthcare software integration',
+      image: 'assets/images/dh_sol_custom_software.jpg',
+      imageAlt: 'Biomedical specialist interacting with custom clinical diagnostic and laboratory software',
       iconSvg: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>',
       coversTitle: 'WHAT THIS SOLUTION COVERS',
       covers: [
