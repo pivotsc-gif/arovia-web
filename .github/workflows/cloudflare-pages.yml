@@ -1,17 +1,12 @@
 # Deploy static site to Cloudflare Pages (direct upload via GitHub Actions).
+# Uses cloudflare/wrangler-action (pages-action is deprecated and no longer published).
 #
 # Required GitHub repository secrets (Settings → Secrets and variables → Actions):
-#   CLOUDFLARE_API_TOKEN   — Create at Cloudflare Dashboard → My Profile → API Tokens
-#                            Template: "Edit Cloudflare Workers" OR custom with:
-#                            Account → Cloudflare Pages → Edit
-#   CLOUDFLARE_ACCOUNT_ID  — Dashboard → Workers & Pages → Account ID (right column)
+#   CLOUDFLARE_API_TOKEN   — Account → Cloudflare Pages → Edit
+#   CLOUDFLARE_ACCOUNT_ID  — Dashboard → Workers & Pages → Account ID
 #
-# Optional repository variable (Settings → Secrets and variables → Actions → Variables):
-#   CLOUDFLARE_PAGES_PROJECT_NAME — defaults to "arovia" if unset
-#
-# In Cloudflare: create a Pages project (Direct Upload) with the same name, or allow
-# the first deploy to create it. Turn OFF Pages "Connect to Git" build if you only
-# want deployments from this workflow (avoids duplicate builds).
+# Optional repository variable:
+#   CLOUDFLARE_PAGES_PROJECT_NAME — defaults to "arovia"
 
 name: Cloudflare Pages
 
@@ -63,12 +58,9 @@ jobs:
           test -d dist/js
 
       - name: Deploy to Cloudflare Pages
-        id: pages
-        uses: cloudflare/pages-action@v1
+        uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: ${{ env.PAGES_PROJECT }}
-          directory: dist
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.head_ref || github.ref_name }}
+          command: pages deploy dist --project-name=${{ env.PAGES_PROJECT }}
