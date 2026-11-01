@@ -128,22 +128,12 @@
   }
 }
 
+/* The per-card rise animation fought the shared scroll reveal and flickered while scrolling. */
+.pharmacy-page .pharmacy-reveal,
+.pharmacy-motion .pharmacy-reveal,
+.pharmacy-motion .pharmacy-reveal.is-in,
 .pharmacy-motion .pharmacy-reveal:not(.is-in) {
-  opacity: 0;
-  transform: translateY(12px);
-}
-
-.pharmacy-motion .pharmacy-reveal.is-in {
-  animation: pharmacy-rise 0.55s ease forwards;
-  animation-delay: var(--pharmacy-delay, 0ms);
-}
-
-.pharmacy-motion .pharmacy-hero .pharmacy-reveal--now.is-in {
-  animation-duration: 0.65s;
-}
-
-.pharmacy-motion .pharmacy-hero .hero-showcase.is-in {
-  --pharmacy-delay: 120ms;
+  animation: none;
 }
 
 @media (max-width: 700px) {

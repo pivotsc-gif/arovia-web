@@ -2145,5 +2145,27 @@
   .dh-mockup-tabs {
     flex-direction: column;
   }
+
+  .dh-sector-tabs,
+  .dh-sector-lead--tabs {
+    display: none;
+  }
+
+  .dh-sector-lead--scroll {
+    display: inline;
+  }
+
+  .dh-sector-content {
+    display: grid !important;
+    grid-template-columns: 1fr;
+    margin-bottom: 18px;
+    padding: 24px 18px;
+  }
+}
+
+@media (min-width: 769px) {
+  .dh-sector-lead--scroll {
+    display: none;
+  }
 }
 

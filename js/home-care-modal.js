@@ -78,8 +78,8 @@
       }
 
       // Toggle Second-level Subnav Groups
-      if (subnavClinical) subnavClinical.style.display = isClinical ? 'flex' : 'none';
-      if (subnavNonClinical) subnavNonClinical.style.display = !isClinical ? 'flex' : 'none';
+      if (subnavClinical) subnavClinical.style.display = isClinical ? '' : 'none';
+      if (subnavNonClinical) subnavNonClinical.style.display = !isClinical ? '' : 'none';
 
       // Update Subtext Intros
       if (introClinical) introClinical.style.display = isClinical ? 'block' : 'none';
@@ -209,21 +209,32 @@
     window.addEventListener('scroll', onWindowScroll, { passive: true });
     window.addEventListener('resize', updateStickyOffsets, { passive: true });
 
+    function firstServiceId(category) {
+      const card = Array.from(serviceItems).find(function (item) {
+        return item.getAttribute('data-category') === category && item.id;
+      });
+      return card ? card.id : '';
+    }
+
+    function openCategory(category) {
+      setCategory(category);
+      const targetId = firstServiceId(category);
+      if (targetId) {
+        scrollToService(targetId);
+      }
+    }
+
     if (btnClinical) {
       btnClinical.addEventListener('click', function(e) {
         e.preventDefault();
-        if (currentCategory !== 'clinical') {
-          setCategory('clinical');
-        }
+        openCategory('clinical');
       });
     }
 
     if (btnNonClinical) {
       btnNonClinical.addEventListener('click', function(e) {
         e.preventDefault();
-        if (currentCategory !== 'non-clinical') {
-          setCategory('non-clinical');
-        }
+        openCategory('non-clinical');
       });
     }
 
